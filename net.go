@@ -57,9 +57,9 @@ type Network struct {
 // getNetworkResource returns a pointer to an NetworkResource structure
 // corresponding to the API JSON response. An error can be returned if
 // something went wrong.
-func getNetworkResource(search map[string]interface{}) (*NetworkResource, error) {
+func (api *API) getNetworkResource(search map[string]interface{}) (*NetworkResource, error) {
 	// Get the NetworkResource from the API
-	response, err := lookup(networkNamespace, nil, search)
+	response, err := api.lookup(networkNamespace, nil, search)
 	if err != nil {
 		return nil, err
 	}
@@ -81,9 +81,9 @@ func getNetworkResource(search map[string]interface{}) (*NetworkResource, error)
 // PeeringDB API can provide matching the given search parameters map. If an
 // error occurs, the returned error will be non-nil. The returned value can be
 // nil if no object could be found.
-func GetNetwork(search map[string]interface{}) (*[]Network, error) {
+func (api *API) GetNetwork(search map[string]interface{}) (*[]Network, error) {
 	// Ask for the all Network objects
-	networkResource, err := getNetworkResource(search)
+	networkResource, err := api.getNetworkResource(search)
 
 	// Error as occured while querying the API
 	if err != nil {
@@ -97,9 +97,9 @@ func GetNetwork(search map[string]interface{}) (*[]Network, error) {
 // GetAllNetworks returns a pointer to a slice of Network structures that the
 // PeeringDB API can provide. If an error occurs, the returned error will be
 // non-nil. The can be nil if no object could be found.
-func GetAllNetworks() (*[]Network, error) {
+func (api *API) GetAllNetworks() (*[]Network, error) {
 	// Return all Network objects
-	return GetNetwork(nil)
+	return api.GetNetwork(nil)
 }
 
 // GetNetworkByID returns a pointer to a Network structure that matches the
@@ -107,7 +107,7 @@ func GetAllNetworks() (*[]Network, error) {
 // will be non-nil if an issue as occured while trying to query the API. If for
 // some reasons the API returns more than one object for the given ID (but it
 // must not) only the first will be used for the returned value.
-func GetNetworkByID(id int) (*Network, error) {
+func (api *API) GetNetworkByID(id int) (*Network, error) {
 	// No point of looking for the network with an ID < 0
 	if id < 0 {
 		return nil, nil
@@ -118,7 +118,7 @@ func GetNetworkByID(id int) (*Network, error) {
 	search["id"] = id
 
 	// Actually ask for it
-	networks, err := GetNetwork(search)
+	networks, err := api.GetNetwork(search)
 
 	// Error as occured while querying the API
 	if err != nil {
@@ -167,9 +167,9 @@ type NetworkFacility struct {
 // getNetworkFacilityResource returns a pointer to an NetworkFacilityResource
 // structure corresponding to the API JSON response. An error can be returned
 // if something went wrong.
-func getNetworkFacilityResource(search map[string]interface{}) (*NetworkFacilityResource, error) {
+func (api *API) getNetworkFacilityResource(search map[string]interface{}) (*NetworkFacilityResource, error) {
 	// Get the NetworkFacilityResource from the API
-	response, err := lookup(networkFacilityNamespace, nil, search)
+	response, err := api.lookup(networkFacilityNamespace, nil, search)
 	if err != nil {
 		return nil, err
 	}
@@ -191,9 +191,9 @@ func getNetworkFacilityResource(search map[string]interface{}) (*NetworkFacility
 // structures that the PeeringDB API can provide matching the given search
 // parameters map. If an error occurs, the returned error will be non-nil. The
 // returned value can be nil if no object could be found.
-func GetNetworkFacility(search map[string]interface{}) (*[]NetworkFacility, error) {
+func (api *API) GetNetworkFacility(search map[string]interface{}) (*[]NetworkFacility, error) {
 	// Ask for the all NetworkFacility objects
-	networkFacilityResource, err := getNetworkFacilityResource(search)
+	networkFacilityResource, err := api.getNetworkFacilityResource(search)
 
 	// Error as occured while querying the API
 	if err != nil {
@@ -207,9 +207,9 @@ func GetNetworkFacility(search map[string]interface{}) (*[]NetworkFacility, erro
 // GetAllNetworkFacilities returns a pointer to a slice of NetworkFacility
 // structures that the PeeringDB API can provide. If an error occurs, the
 // returned error will be non-nil. The can be nil if no object could be found.
-func GetAllNetworkFacilities() (*[]NetworkFacility, error) {
+func (api *API) GetAllNetworkFacilities() (*[]NetworkFacility, error) {
 	// Return all NetFacility objects
-	return GetNetworkFacility(nil)
+	return api.GetNetworkFacility(nil)
 }
 
 // GetNetworkFacilityByID returns a pointer to a NetworkFacility structure that
@@ -218,7 +218,7 @@ func GetAllNetworkFacilities() (*[]NetworkFacility, error) {
 // the API. If for some reasons the API returns more than one object for the
 // given ID (but it must not) only the first will be used for the returned
 // value.
-func GetNetworkFacilityByID(id int) (*NetworkFacility, error) {
+func (api *API) GetNetworkFacilityByID(id int) (*NetworkFacility, error) {
 	// No point of looking for the network facility with an ID < 0
 	if id < 0 {
 		return nil, nil
@@ -229,7 +229,7 @@ func GetNetworkFacilityByID(id int) (*NetworkFacility, error) {
 	search["id"] = id
 
 	// Actually ask for it
-	networkFacilities, err := GetNetworkFacility(search)
+	networkFacilities, err := api.GetNetworkFacility(search)
 
 	// Error as occured while querying the API
 	if err != nil {
@@ -281,9 +281,9 @@ type NetworkInternetExchangeLAN struct {
 // getNetworkInternetExchangeLANResource returns a pointer to an
 // NetworkInternetExchangeLANResource structure corresponding to the API JSON
 // response. An error can be returned if something went wrong.
-func getNetworkInternetExchangeLANResource(search map[string]interface{}) (*NetworkInternetExchangeLANResource, error) {
+func (api *API) getNetworkInternetExchangeLANResource(search map[string]interface{}) (*NetworkInternetExchangeLANResource, error) {
 	// Get the NetworkInternetExchangeLANResource from the API
-	response, err := lookup(networkInternetExchangeLANNamepsace, nil, search)
+	response, err := api.lookup(networkInternetExchangeLANNamepsace, nil, search)
 	if err != nil {
 		return nil, err
 	}
@@ -306,9 +306,9 @@ func getNetworkInternetExchangeLANResource(search map[string]interface{}) (*Netw
 // matching the given search parameters map. If an error occurs, the returned
 // error will be non-nil. The returned value can be nil if no object could be
 // found.
-func GetNetworkInternetExchangeLAN(search map[string]interface{}) (*[]NetworkInternetExchangeLAN, error) {
+func (api *API) GetNetworkInternetExchangeLAN(search map[string]interface{}) (*[]NetworkInternetExchangeLAN, error) {
 	// Ask for the all NetInternetExchangeLAN objects
-	networkInternetExchangeLANResource, err := getNetworkInternetExchangeLANResource(search)
+	networkInternetExchangeLANResource, err := api.getNetworkInternetExchangeLANResource(search)
 
 	// Error as occured while querying the API
 	if err != nil {
@@ -323,9 +323,9 @@ func GetNetworkInternetExchangeLAN(search map[string]interface{}) (*[]NetworkInt
 // NetworkInternetExchangeLAN structures that the PeeringDB API can provide. If
 // an error occurs, the returned error will be non-nil. The can be nil if no
 // object could be found.
-func GetAllNetworkInternetExchangeLANs() (*[]NetworkInternetExchangeLAN, error) {
+func (api *API) GetAllNetworkInternetExchangeLANs() (*[]NetworkInternetExchangeLAN, error) {
 	// Return all NetworkInternetExchangeLAN objects
-	return GetNetworkInternetExchangeLAN(nil)
+	return api.GetNetworkInternetExchangeLAN(nil)
 }
 
 // GetNetworkInternetExchangeLANByID returns a pointer to a
@@ -334,7 +334,7 @@ func GetAllNetworkInternetExchangeLANs() (*[]NetworkInternetExchangeLAN, error) 
 // issue as occured while trying to query the API. If for some reasons the API
 // returns more than one object for the given ID (but it must not) only the
 // first will be used for the returned value.
-func GetNetworkInternetExchangeLANByID(id int) (*NetworkInternetExchangeLAN, error) {
+func (api *API) GetNetworkInternetExchangeLANByID(id int) (*NetworkInternetExchangeLAN, error) {
 	// No point of looking for the Internet exchange LAN with an ID < 0
 	if id < 0 {
 		return nil, nil
@@ -345,7 +345,7 @@ func GetNetworkInternetExchangeLANByID(id int) (*NetworkInternetExchangeLAN, err
 	search["id"] = id
 
 	// Actually ask for it
-	networkInternetExchangeLANs, err := GetNetworkInternetExchangeLAN(search)
+	networkInternetExchangeLANs, err := api.GetNetworkInternetExchangeLAN(search)
 
 	// Error as occured while querying the API
 	if err != nil {

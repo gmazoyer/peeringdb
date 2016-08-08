@@ -45,9 +45,9 @@ type Facility struct {
 // getFacilityResource returns a pointer to a FacilityResource structure
 // corresponding to the API JSON response. An error can be returned if
 // something went wrong.
-func getFacilityResource(search map[string]interface{}) (*FacilityResource, error) {
+func (api *API) getFacilityResource(search map[string]interface{}) (*FacilityResource, error) {
 	// Get the FacilityResource from the API
-	response, err := lookup(facilityNamespace, nil, search)
+	response, err := api.lookup(facilityNamespace, nil, search)
 	if err != nil {
 		return nil, err
 	}
@@ -69,9 +69,9 @@ func getFacilityResource(search map[string]interface{}) (*FacilityResource, erro
 // PeeringDB API can provide matching the given search parameters map. If an
 // error occurs, the returned error will be non-nil. The returned value can be
 // nil if no object could be found.
-func GetFacility(search map[string]interface{}) (*[]Facility, error) {
+func (api *API) GetFacility(search map[string]interface{}) (*[]Facility, error) {
 	// Ask for the all Facility objects
-	facilyResource, err := getFacilityResource(search)
+	facilyResource, err := api.getFacilityResource(search)
 
 	// Error as occured while querying the API
 	if err != nil {
@@ -85,9 +85,9 @@ func GetFacility(search map[string]interface{}) (*[]Facility, error) {
 // GetAllFacilities returns a pointer to a slice of Facility structures that
 // the PeeringDB API can provide. If an error occurs, the returned error will
 // be non-nil. The can be nil if no object could be found.
-func GetAllFacilities() (*[]Facility, error) {
+func (api *API) GetAllFacilities() (*[]Facility, error) {
 	// Return all Facility objects
-	return GetFacility(nil)
+	return api.GetFacility(nil)
 }
 
 // GetFacilityByID returns a pointer to a Facility structure that matches the
@@ -95,7 +95,7 @@ func GetAllFacilities() (*[]Facility, error) {
 // will be non-nil if an issue as occured while trying to query the API. If for
 // some reasons the API returns more than one object for the given ID (but it
 // must not) only the first will be used for the returned value.
-func GetFacilityByID(id int) (*Facility, error) {
+func (api *API) GetFacilityByID(id int) (*Facility, error) {
 	// No point of looking for the facility with an ID < 0
 	if id < 0 {
 		return nil, nil
@@ -106,7 +106,7 @@ func GetFacilityByID(id int) (*Facility, error) {
 	search["id"] = id
 
 	// Actually ask for it
-	facilities, err := GetFacility(search)
+	facilities, err := api.GetFacility(search)
 
 	// Error as occured while querying the API
 	if err != nil {

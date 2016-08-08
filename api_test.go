@@ -50,83 +50,102 @@ func TestFormatURL(t *testing.T) {
 	var expected string
 	var url string
 
+	base := "https://peeringdb.com/api/"
 	searchMap := make(map[string]interface{})
 	searchMap["id"] = 10
 
 	// Test fac namespace with search parameter
 	expected = "https://peeringdb.com/api/fac?depth=1&id=10"
-	url = formatURL(facilityNamespace, searchMap)
+	url = formatURL(base, facilityNamespace, searchMap)
 	if url != expected {
 		t.Errorf("formatURL, want '%s' got '%s'", expected, url)
 	}
 
 	// Test ix namespace with search parameter
 	expected = "https://peeringdb.com/api/ix?depth=1&id=10"
-	url = formatURL(internetExchangeNamespace, searchMap)
+	url = formatURL(base, internetExchangeNamespace, searchMap)
 	if url != expected {
 		t.Errorf("formatURL, want '%s' got '%s'", expected, url)
 	}
 
 	// Test ixfac namespace with search parameter
 	expected = "https://peeringdb.com/api/ixfac?depth=1&id=10"
-	url = formatURL(internetExchangeFacilityNamespace, searchMap)
+	url = formatURL(base, internetExchangeFacilityNamespace, searchMap)
 	if url != expected {
 		t.Errorf("formatURL, want '%s' got '%s'", expected, url)
 	}
 
 	// Test ixlan namespace with search parameter
 	expected = "https://peeringdb.com/api/ixlan?depth=1&id=10"
-	url = formatURL(internetExchangeLANNamespace, searchMap)
+	url = formatURL(base, internetExchangeLANNamespace, searchMap)
 	if url != expected {
 		t.Errorf("formatURL, want '%s' got '%s'", expected, url)
 	}
 
 	// Test ixpfx namespace with search parameter
 	expected = "https://peeringdb.com/api/ixpfx?depth=1&id=10"
-	url = formatURL(internetExchangePrefixNamespace, searchMap)
+	url = formatURL(base, internetExchangePrefixNamespace, searchMap)
 	if url != expected {
 		t.Errorf("formatURL, want '%s' got '%s'", expected, url)
 	}
 
 	// Test net namespace with search parameter
 	expected = "https://peeringdb.com/api/net?depth=1&id=10"
-	url = formatURL(networkNamespace, searchMap)
+	url = formatURL(base, networkNamespace, searchMap)
 	if url != expected {
 		t.Errorf("formatURL, want '%s' got '%s'", expected, url)
 	}
 
 	// Test netfac namespace with search parameter
 	expected = "https://peeringdb.com/api/netfac?depth=1&id=10"
-	url = formatURL(networkFacilityNamespace, searchMap)
+	url = formatURL(base, networkFacilityNamespace, searchMap)
 	if url != expected {
 		t.Errorf("formatURL, want '%s' got '%s'", expected, url)
 	}
 
 	// Test netixlan namespace with search parameter
 	expected = "https://peeringdb.com/api/netixlan?depth=1&id=10"
-	url = formatURL(networkInternetExchangeLANNamepsace, searchMap)
+	url = formatURL(base, networkInternetExchangeLANNamepsace, searchMap)
 	if url != expected {
 		t.Errorf("formatURL, want '%s' got '%s'", expected, url)
 	}
 
 	// Test org namespace with search parameter
 	expected = "https://peeringdb.com/api/org?depth=1&id=10"
-	url = formatURL(organizationNamespace, searchMap)
+	url = formatURL(base, organizationNamespace, searchMap)
 	if url != expected {
 		t.Errorf("formatURL, want '%s' got '%s'", expected, url)
 	}
 
 	// Test poc namespace with search parameter
 	expected = "https://peeringdb.com/api/poc?depth=1&id=10"
-	url = formatURL(networkContactNamespace, searchMap)
+	url = formatURL(base, networkContactNamespace, searchMap)
 	if url != expected {
 		t.Errorf("formatURL, want '%s' got '%s'", expected, url)
 	}
 }
 
+func TestNewAPI(t *testing.T) {
+	var expectedURL string
+	var api *API
+
+	api = NewAPI()
+	expectedURL = "https://peeringdb.com/api/"
+	if api.URL != expectedURL {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.URL)
+	}
+
+	api = NewAPIFromURL("http://localhost/api/")
+	expectedURL = "http://localhost/api/"
+	if api.URL != expectedURL {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.URL)
+	}
+}
+
 func TestGetASN(t *testing.T) {
+	api := NewAPI()
 	expectedASN := 29467
-	net := GetASN(expectedASN)
+	net := api.GetASN(expectedASN)
 
 	if net.ASN != expectedASN {
 		t.Errorf("GetASN, want ASN '%d' got '%d'", expectedASN, net.ASN)

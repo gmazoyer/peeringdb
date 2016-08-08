@@ -3,12 +3,14 @@ package peeringdb
 import "fmt"
 
 func Example() {
+	api := NewAPI()
+
 	// Look for the organization given a name
 	search := make(map[string]interface{})
 	search["name"] = "LUXNETWORK S.A."
 
 	// Get the organization, pointer to slice returned
-	organizations, err := GetOrganization(search)
+	organizations, err := api.GetOrganization(search)
 
 	// If an error as occured, print it
 	if err != nil {
@@ -37,7 +39,7 @@ func Example() {
 		// For each network
 		for _, networkID := range org.NetworkSet {
 			// Get the details and print it
-			network, err := GetNetworkByID(networkID)
+			network, err := api.GetNetworkByID(networkID)
 			if err != nil {
 				fmt.Println(err)
 			} else {
@@ -48,8 +50,9 @@ func Example() {
 	// Output: LUXNETWORK S.A.
 }
 
-func ExampleGetASN() {
-	as29467 := GetASN(29467)
+func ExampleGetASN_API() {
+	api := NewAPI()
+	as29467 := api.GetASN(29467)
 
 	fmt.Printf("Name:      %s\n", as29467.Name)
 	fmt.Printf("AS number: %d\n", as29467.ASN)

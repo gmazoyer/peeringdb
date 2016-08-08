@@ -33,6 +33,23 @@ var (
 	ErrQueryingAPI = errors.New("Error while querying PeeringDB API.")
 )
 
+// API is the structure used to interact with the PeeringDB API. This is the
+// main structure of this package. All functions to make API calls are
+// associated to this structure.
+type API struct {
+	URL string
+}
+
+// NewAPI returns a pointer to a new API structure.
+func NewAPI() *API {
+	return &API{baseAPI}
+}
+
+// NewAPIFromURL returns a pointer to a new API structure from a given URL.
+func NewAPIFromURL(url string) *API {
+	return &API{url}
+}
+
 // formatSearchParameters is used to format parameters for a request. When
 // building the search string the keys will be used in the alphabetic order.
 func formatSearchParameters(parameters map[string]interface{}) string {
@@ -61,8 +78,8 @@ func formatSearchParameters(parameters map[string]interface{}) string {
 }
 
 // formatURL is used to format The URL to call the PeeringDB API.
-func formatURL(namespace string, search map[string]interface{}) string {
-	return fmt.Sprintf("%s%s?depth=1%s", baseAPI, namespace,
+func formatURL(base, namespace string, search map[string]interface{}) string {
+	return fmt.Sprintf("%s%s?depth=1%s", base, namespace,
 		formatSearchParameters(search))
 }
 
@@ -71,8 +88,8 @@ func formatURL(namespace string, search map[string]interface{}) string {
 // decode with a JSON decoder. If auth is provided, non-nil slice with two
 // values, the first one being the username and the second one being the
 // password, an authentication is made.
-func lookup(namespace string, auth []string, search map[string]interface{}) (*http.Response, error) {
-	url := formatURL(namespace, search)
+func (api *API) lookup(namespace string, auth []string, search map[string]interface{}) (*http.Response, error) {
+	url := formatURL(api.URL, namespace, search)
 	if url == "" {
 		return nil, ErrBuildingURL
 	}
@@ -102,12 +119,12 @@ func lookup(namespace string, auth []string, search map[string]interface{}) (*ht
 // GetASN is a simplified function to get PeeringDB details about a given AS
 // number. It basically gets the Net object matching the AS number. If the AS
 // number cannot be found, nil is returned.
-func GetASN(asn int) *Network {
+func (api *API) GetASN(asn int) *Network {
 	search := make(map[string]interface{})
 	search["asn"] = asn
 
 	// Actually fetch the Network from PeeringDB
-	network, err := GetNetwork(search)
+	network, err := api.GetNetwork(search)
 
 	// Error, so nil pointer returned
 	if err != nil {

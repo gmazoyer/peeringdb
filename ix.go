@@ -48,9 +48,9 @@ type InternetExchange struct {
 // getInternetExchangeResource returns a pointer to an InternetExchangeResource
 // structure corresponding to the API JSON response. An error can be returned
 // if something went wrong.
-func getInternetExchangeResource(search map[string]interface{}) (*InternetExchangeResource, error) {
+func (api *API) getInternetExchangeResource(search map[string]interface{}) (*InternetExchangeResource, error) {
 	// Get the InternetExchangeResource from the API
-	response, err := lookup(internetExchangeNamespace, nil, search)
+	response, err := api.lookup(internetExchangeNamespace, nil, search)
 	if err != nil {
 		return nil, err
 	}
@@ -72,9 +72,9 @@ func getInternetExchangeResource(search map[string]interface{}) (*InternetExchan
 // structures that the PeeringDB API can provide matching the given search
 // parameters map. If an error occurs, the returned error will be non-nil. The
 // returned value can be nil if no object could be found.
-func GetInternetExchange(search map[string]interface{}) (*[]InternetExchange, error) {
+func (api *API) GetInternetExchange(search map[string]interface{}) (*[]InternetExchange, error) {
 	// Ask for the all InternetExchange objects
-	internetExchangeResource, err := getInternetExchangeResource(search)
+	internetExchangeResource, err := api.getInternetExchangeResource(search)
 
 	// Error as occured while querying the API
 	if err != nil {
@@ -88,9 +88,9 @@ func GetInternetExchange(search map[string]interface{}) (*[]InternetExchange, er
 // GetAllInternetExchanges returns a pointer to a slice of InternetExchange
 // structures that the PeeringDB API can provide. If an error occurs, the
 // returned error will be non-nil. The can be nil if no object could be found.
-func GetAllInternetExchanges() (*[]InternetExchange, error) {
+func (api *API) GetAllInternetExchanges() (*[]InternetExchange, error) {
 	// Return all InternetExchange objects
-	return GetInternetExchange(nil)
+	return api.GetInternetExchange(nil)
 }
 
 // GetInternetExchangeByID returns a pointer to a InternetExchange structure
@@ -99,7 +99,7 @@ func GetAllInternetExchanges() (*[]InternetExchange, error) {
 // query the API. If for some reasons the API returns more than one object for
 // the given ID (but it must not) only the first will be used for the returned
 // value.
-func GetInternetExchangeByID(id int) (*InternetExchange, error) {
+func (api *API) GetInternetExchangeByID(id int) (*InternetExchange, error) {
 	// No point of looking for the Internet exchange with an ID < 0
 	if id < 0 {
 		return nil, nil
@@ -110,7 +110,7 @@ func GetInternetExchangeByID(id int) (*InternetExchange, error) {
 	search["id"] = id
 
 	// Actually ask for it
-	internetExchanges, err := GetInternetExchange(search)
+	internetExchanges, err := api.GetInternetExchange(search)
 
 	// Error as occured while querying the API
 	if err != nil {
@@ -161,9 +161,9 @@ type InternetExchangeLAN struct {
 // getInternetExchangeLANResource returns a pointer to an
 // InternetExchangeLANResource structure corresponding to the API JSON
 // response. An error can be returned if  something went wrong.
-func getInternetExchangeLANResource(search map[string]interface{}) (*InternetExchangeLANResource, error) {
+func (api *API) getInternetExchangeLANResource(search map[string]interface{}) (*InternetExchangeLANResource, error) {
 	// Get the InternetExchangeLANResource from the API
-	response, err := lookup(internetExchangeLANNamespace, nil, search)
+	response, err := api.lookup(internetExchangeLANNamespace, nil, search)
 	if err != nil {
 		return nil, err
 	}
@@ -185,9 +185,9 @@ func getInternetExchangeLANResource(search map[string]interface{}) (*InternetExc
 // structures that the PeeringDB API can provide matching the given search
 // parameters map. If an error occurs, the returned error will be non-nil. The
 // returned value can be nil if no object could be found.
-func GetInternetExchangeLAN(search map[string]interface{}) (*[]InternetExchangeLAN, error) {
+func (api *API) GetInternetExchangeLAN(search map[string]interface{}) (*[]InternetExchangeLAN, error) {
 	// Ask for the all InternetExchangeLAN objects
-	internetExchangeLANResource, err := getInternetExchangeLANResource(search)
+	internetExchangeLANResource, err := api.getInternetExchangeLANResource(search)
 
 	// Error as occured while querying the API
 	if err != nil {
@@ -202,9 +202,9 @@ func GetInternetExchangeLAN(search map[string]interface{}) (*[]InternetExchangeL
 // InternetExchangeLAN structures that the PeeringDB API can provide. If an
 // error occurs, the returned error will be non-nil. The can be nil if no
 // object could be found.
-func GetAllInternetExchangeLANs() (*[]InternetExchangeLAN, error) {
+func (api *API) GetAllInternetExchangeLANs() (*[]InternetExchangeLAN, error) {
 	// Return all InternetExchangeLAN objects
-	return GetInternetExchangeLAN(nil)
+	return api.GetInternetExchangeLAN(nil)
 }
 
 // GetInternetExchangeLANByID returns a pointer to a InternetExchangeLAN
@@ -213,7 +213,7 @@ func GetAllInternetExchangeLANs() (*[]InternetExchangeLAN, error) {
 // trying to query the API. If for some reasons the API returns more than one
 // object for the given ID (but it must not) only the first will be used for
 // the returned value.
-func GetInternetExchangeLANByID(id int) (*InternetExchangeLAN, error) {
+func (api *API) GetInternetExchangeLANByID(id int) (*InternetExchangeLAN, error) {
 	// No point of looking for the Internet exchange LAN with an ID < 0
 	if id < 0 {
 		return nil, nil
@@ -224,7 +224,7 @@ func GetInternetExchangeLANByID(id int) (*InternetExchangeLAN, error) {
 	search["id"] = id
 
 	// Actually ask for it
-	ixLANs, err := GetInternetExchangeLAN(search)
+	ixLANs, err := api.GetInternetExchangeLAN(search)
 
 	// Error as occured while querying the API
 	if err != nil {
@@ -268,9 +268,9 @@ type InternetExchangePrefix struct {
 // getInternetExchangePrefixResource returns a pointer to an
 // InternetExchangePrefixResource structure corresponding to the API JSON
 // response. An error can be returned if something went wrong.
-func getInternetExchangePrefixResource(search map[string]interface{}) (*InternetExchangePrefixResource, error) {
+func (api *API) getInternetExchangePrefixResource(search map[string]interface{}) (*InternetExchangePrefixResource, error) {
 	// Get the InternetExchangePrefixResource from the API
-	response, err := lookup(internetExchangePrefixNamespace, nil, search)
+	response, err := api.lookup(internetExchangePrefixNamespace, nil, search)
 	if err != nil {
 		return nil, err
 	}
@@ -293,9 +293,9 @@ func getInternetExchangePrefixResource(search map[string]interface{}) (*Internet
 // matching the given search parameters map. If an error occurs, the returned
 // error will be non-nil. The returned value can be nil if no object could be
 // found.
-func GetInternetExchangePrefix(search map[string]interface{}) (*[]InternetExchangePrefix, error) {
+func (api *API) GetInternetExchangePrefix(search map[string]interface{}) (*[]InternetExchangePrefix, error) {
 	// Ask for the all InternetExchangePrefix objects
-	internetExchangePrefixResource, err := getInternetExchangePrefixResource(search)
+	internetExchangePrefixResource, err := api.getInternetExchangePrefixResource(search)
 
 	// Error as occured while querying the API
 	if err != nil {
@@ -310,9 +310,9 @@ func GetInternetExchangePrefix(search map[string]interface{}) (*[]InternetExchan
 // InternetExchangePrefix structures that the PeeringDB API can provide. If an
 // error occurs, the returned error will be non-nil. The can be nil if no
 // object could be found.
-func GetAllInternetExchangePrefixes() (*[]InternetExchangePrefix, error) {
+func (api *API) GetAllInternetExchangePrefixes() (*[]InternetExchangePrefix, error) {
 	// Return all InternetExchangePrefix objects
-	return GetInternetExchangePrefix(nil)
+	return api.GetInternetExchangePrefix(nil)
 }
 
 // GetInternetExchangePrefixByID returns a pointer to a InternetExchangePrefix
@@ -321,7 +321,7 @@ func GetAllInternetExchangePrefixes() (*[]InternetExchangePrefix, error) {
 // trying to query the API. If for some reasons the API returns more than one
 // object for the given ID (but it must not) only the first will be used for
 // the returned value.
-func GetInternetExchangePrefixByID(id int) (*InternetExchangePrefix, error) {
+func (api *API) GetInternetExchangePrefixByID(id int) (*InternetExchangePrefix, error) {
 	// No point of looking for the Internet exchange prefix with an ID < 0
 	if id < 0 {
 		return nil, nil
@@ -332,7 +332,7 @@ func GetInternetExchangePrefixByID(id int) (*InternetExchangePrefix, error) {
 	search["id"] = id
 
 	// Actually ask for it
-	ixPrefixes, err := GetInternetExchangePrefix(search)
+	ixPrefixes, err := api.GetInternetExchangePrefix(search)
 
 	// Error as occured while querying the API
 	if err != nil {
@@ -378,9 +378,9 @@ type InternetExchangeFacility struct {
 // getInternetExchangeFacilityResource returns a pointer to an
 // InternetExchangeFacilityResource structure corresponding to the API JSON
 // response. An error can be returned if something went wrong.
-func getInternetExchangeFacilityResource(search map[string]interface{}) (*InternetExchangeFacilityResource, error) {
+func (api *API) getInternetExchangeFacilityResource(search map[string]interface{}) (*InternetExchangeFacilityResource, error) {
 	// Get the InternetExchangeFacilityResource from the API
-	response, err := lookup(internetExchangeFacilityNamespace, nil, search)
+	response, err := api.lookup(internetExchangeFacilityNamespace, nil, search)
 	if err != nil {
 		return nil, err
 	}
@@ -403,9 +403,9 @@ func getInternetExchangeFacilityResource(search map[string]interface{}) (*Intern
 // matching the given search parameters map. If an error occurs, the returned
 // error will be non-nil. The returned value can be nil if no object could be
 // found.
-func GetInternetExchangeFacility(search map[string]interface{}) (*[]InternetExchangeFacility, error) {
+func (api *API) GetInternetExchangeFacility(search map[string]interface{}) (*[]InternetExchangeFacility, error) {
 	// Ask for the all InternetExchangeFacility objects
-	internetExchangeFacilityResource, err := getInternetExchangeFacilityResource(search)
+	internetExchangeFacilityResource, err := api.getInternetExchangeFacilityResource(search)
 
 	// Error as occured while querying the API
 	if err != nil {
@@ -421,9 +421,9 @@ func GetInternetExchangeFacility(search map[string]interface{}) (*[]InternetExch
 // InternetExchangeFacility structures that the PeeringDB API can provide. If
 // an error occurs, the returned error will be non-nil. The can be nil if no
 // object could be found.
-func GetAllInternetExchangeFacilities() (*[]InternetExchangeFacility, error) {
+func (api *API) GetAllInternetExchangeFacilities() (*[]InternetExchangeFacility, error) {
 	// Return all InternetExchangeFacility objects
-	return GetInternetExchangeFacility(nil)
+	return api.GetInternetExchangeFacility(nil)
 }
 
 // GetInternetExchangeFacilityByID returns a pointer to a
@@ -432,7 +432,7 @@ func GetAllInternetExchangeFacilities() (*[]InternetExchangeFacility, error) {
 // issue as occured while trying to query the API. If for some reasons the API
 // returns more than one object for the given ID (but it must not) only the
 // first will be used for the returned value.
-func GetInternetExchangeFacilityByID(id int) (*InternetExchangeFacility, error) {
+func (api *API) GetInternetExchangeFacilityByID(id int) (*InternetExchangeFacility, error) {
 	// No point of looking for the Internet exchange facility with an ID < 0
 	if id < 0 {
 		return nil, nil
@@ -443,7 +443,7 @@ func GetInternetExchangeFacilityByID(id int) (*InternetExchangeFacility, error) 
 	search["id"] = id
 
 	// Actually ask for it
-	ixFacilities, err := GetInternetExchangeFacility(search)
+	ixFacilities, err := api.GetInternetExchangeFacility(search)
 
 	// Error as occured while querying the API
 	if err != nil {

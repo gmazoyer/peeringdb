@@ -41,9 +41,9 @@ type Organization struct {
 // getOrganizationResource returns a pointer to an OrganizationResource
 // structure corresponding to the API JSON response. An error can be returned
 // if something went wrong.
-func getOrganizationResource(search map[string]interface{}) (*OrganizationResource, error) {
+func (api *API) getOrganizationResource(search map[string]interface{}) (*OrganizationResource, error) {
 	// Get the OrganizationResource from the API
-	response, err := lookup(organizationNamespace, nil, search)
+	response, err := api.lookup(organizationNamespace, nil, search)
 	if err != nil {
 		return nil, err
 	}
@@ -65,9 +65,9 @@ func getOrganizationResource(search map[string]interface{}) (*OrganizationResour
 // the PeeringDB API can provide matching the given search parameters map. If
 // an error occurs, the returned error will be non-nil. The returned value can
 // be nil if no object could be found.
-func GetOrganization(search map[string]interface{}) (*[]Organization, error) {
+func (api *API) GetOrganization(search map[string]interface{}) (*[]Organization, error) {
 	// Ask for the all Organization objects
-	organizationResource, err := getOrganizationResource(search)
+	organizationResource, err := api.getOrganizationResource(search)
 
 	// Error as occured while querying the API
 	if err != nil {
@@ -81,9 +81,9 @@ func GetOrganization(search map[string]interface{}) (*[]Organization, error) {
 // GetAllOrganizations returns a pointer to a slice of Organization structures
 // that the PeeringDB API can provide. If an error occurs, the returned error
 // will be non-nil. The can be nil if no object could be found.
-func GetAllOrganizations() (*[]Organization, error) {
+func (api *API) GetAllOrganizations() (*[]Organization, error) {
 	// Return all Organization objects
-	return GetOrganization(nil)
+	return api.GetOrganization(nil)
 }
 
 // GetOrganizationByID returns a pointer to a Organization structure that
@@ -92,7 +92,7 @@ func GetAllOrganizations() (*[]Organization, error) {
 // the API. If for some reasons the API returns more than one object for the
 // given ID (but it must not) only the first will be used for the returned
 // value.
-func GetOrganizationByID(id int) (*Organization, error) {
+func (api *API) GetOrganizationByID(id int) (*Organization, error) {
 	// No point of looking for the organization with an ID < 0
 	if id < 0 {
 		return nil, nil
@@ -103,7 +103,7 @@ func GetOrganizationByID(id int) (*Organization, error) {
 	search["id"] = id
 
 	// Actually ask for it
-	organizations, err := GetOrganization(search)
+	organizations, err := api.GetOrganization(search)
 
 	// Error as occured while querying the API
 	if err != nil {
