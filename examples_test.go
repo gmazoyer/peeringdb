@@ -50,7 +50,7 @@ func Example() {
 	// Output: LUXNETWORK S.A.
 }
 
-func ExampleGetASN_API() {
+func ExampleAPI_GetASN() {
 	api := NewAPI()
 	as29467 := api.GetASN(29467)
 
