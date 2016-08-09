@@ -52,7 +52,7 @@ func NewAPI() *API {
 	}
 }
 
-// NewAPIWithAuth return a pointer to a new API structure. The API will point
+// NewAPIWithAuth returns a pointer to a new API structure. The API will point
 // to the publicly known PeeringDB API endpoint and will use the provided login
 // and password to attempt an authentication while making API calls.
 func NewAPIWithAuth(login, password string) *API {

@@ -1,5 +1,6 @@
 # PeeringDB API - Go package
 
+[![Code Health](https://landscape.io/github/respawner/peeringdb/master/landscape.svg?style=flat)](https://landscape.io/github/respawner/peeringdb/master)
 [![Build Status](https://travis-ci.org/respawner/peeringdb.svg?branch=master)](https://travis-ci.org/respawner/peeringdb)
 [![GoDoc](https://godoc.org/github.com/respawner/peeringdb?status.svg)](https://godoc.org/github.com/respawner/peeringdb)
 
