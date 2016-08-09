@@ -59,7 +59,7 @@ type Network struct {
 // something went wrong.
 func (api *API) getNetworkResource(search map[string]interface{}) (*NetworkResource, error) {
 	// Get the NetworkResource from the API
-	response, err := api.lookup(networkNamespace, nil, search)
+	response, err := api.lookup(networkNamespace, search)
 	if err != nil {
 		return nil, err
 	}
@@ -169,7 +169,7 @@ type NetworkFacility struct {
 // if something went wrong.
 func (api *API) getNetworkFacilityResource(search map[string]interface{}) (*NetworkFacilityResource, error) {
 	// Get the NetworkFacilityResource from the API
-	response, err := api.lookup(networkFacilityNamespace, nil, search)
+	response, err := api.lookup(networkFacilityNamespace, search)
 	if err != nil {
 		return nil, err
 	}
@@ -283,7 +283,7 @@ type NetworkInternetExchangeLAN struct {
 // response. An error can be returned if something went wrong.
 func (api *API) getNetworkInternetExchangeLANResource(search map[string]interface{}) (*NetworkInternetExchangeLANResource, error) {
 	// Get the NetworkInternetExchangeLANResource from the API
-	response, err := api.lookup(networkInternetExchangeLANNamepsace, nil, search)
+	response, err := api.lookup(networkInternetExchangeLANNamepsace, search)
 	if err != nil {
 		return nil, err
 	}

@@ -129,16 +129,87 @@ func TestNewAPI(t *testing.T) {
 	var expectedURL string
 	var api *API
 
+	// Test to use the public PeeringDB API
 	api = NewAPI()
 	expectedURL = "https://peeringdb.com/api/"
-	if api.URL != expectedURL {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.URL)
+	if api.url != expectedURL {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
+	}
+}
+
+func TestNewAPIWithAuth(t *testing.T) {
+	var expectedURL, expectedLogin, expectedPassword string
+	var api *API
+
+	// Test to use the public PeeringDB API with authentication
+	api = NewAPIWithAuth("test", "123")
+	expectedURL = "https://peeringdb.com/api/"
+	expectedLogin = "test"
+	expectedPassword = "123"
+	if api.url != expectedURL {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
+	}
+	if api.authLogin != expectedLogin {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedLogin, api.authLogin)
+	}
+	if api.authPassword != expectedPassword {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedPassword, api.authPassword)
+	}
+}
+
+func TestNewAPIFromURL(t *testing.T) {
+	var expectedURL string
+	var api *API
+
+	// Test to see if an empty string parameter will force to use the public
+	// PeeringDB API.
+	api = NewAPIFromURL("")
+	expectedURL = "https://peeringdb.com/api/"
+	if api.url != expectedURL {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
 	}
 
+	// Test with
 	api = NewAPIFromURL("http://localhost/api/")
 	expectedURL = "http://localhost/api/"
-	if api.URL != expectedURL {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.URL)
+	if api.url != expectedURL {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
+	}
+}
+
+func TestNewAPIFromURLWithAuth(t *testing.T) {
+	var expectedURL, expectedLogin, expectedPassword string
+	var api *API
+
+	// Test to see if an empty string parameter will force to use the public
+	// PeeringDB API.
+	api = NewAPIFromURLWithAuth("", "test", "123")
+	expectedURL = "https://peeringdb.com/api/"
+	expectedLogin = "test"
+	expectedPassword = "123"
+	if api.url != expectedURL {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
+	}
+	if api.authLogin != expectedLogin {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedLogin, api.authLogin)
+	}
+	if api.authPassword != expectedPassword {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedPassword, api.authPassword)
+	}
+
+	// Test with
+	api = NewAPIFromURLWithAuth("http://localhost/api/", "test", "123")
+	expectedURL = "http://localhost/api/"
+	expectedLogin = "test"
+	expectedPassword = "123"
+	if api.url != expectedURL {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
+	}
+	if api.authLogin != expectedLogin {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedLogin, api.authLogin)
+	}
+	if api.authPassword != expectedPassword {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedPassword, api.authPassword)
 	}
 }
 

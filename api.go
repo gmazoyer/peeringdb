@@ -37,17 +37,60 @@ var (
 // main structure of this package. All functions to make API calls are
 // associated to this structure.
 type API struct {
-	URL string
+	url          string
+	authLogin    string
+	authPassword string
 }
 
-// NewAPI returns a pointer to a new API structure.
+// NewAPI returns a pointer to a new API structure. It uses the publicly known
+// PeeringDB API endpoint.
 func NewAPI() *API {
-	return &API{baseAPI}
+	return &API{
+		url:          baseAPI,
+		authLogin:    "",
+		authPassword: "",
+	}
 }
 
-// NewAPIFromURL returns a pointer to a new API structure from a given URL.
+// NewAPIWithAuth return a pointer to a new API structure. The API will point
+// to the publicly known PeeringDB API endpoint and will use the provided login
+// and password to attempt an authentication while making API calls.
+func NewAPIWithAuth(login, password string) *API {
+	return &API{
+		url:          baseAPI,
+		authLogin:    login,
+		authPassword: password,
+	}
+}
+
+// NewAPIFromURL returns a pointer to a new API structure from a given URL. If
+// the given URL is empty it will use the default PeeringDB API URL.
 func NewAPIFromURL(url string) *API {
-	return &API{url}
+	if url == "" {
+		return NewAPI()
+	}
+
+	return &API{
+		url:          url,
+		authLogin:    "",
+		authPassword: "",
+	}
+}
+
+// NewAPIFromURLWithAuth returns a pointer to a new API structure from a given
+// URL. If the given URL is empty it will use the default PeeringDB API URL. It
+// will use the provided login and password to attempt an authentication while
+// making API calls.
+func NewAPIFromURLWithAuth(url, login, password string) *API {
+	if url == "" {
+		return NewAPIWithAuth(login, password)
+	}
+
+	return &API{
+		url:          url,
+		authLogin:    login,
+		authPassword: password,
+	}
 }
 
 // formatSearchParameters is used to format parameters for a request. When
@@ -85,11 +128,9 @@ func formatURL(base, namespace string, search map[string]interface{}) string {
 
 // lookup is used to query the PeeringDB API given a namespace to use and data
 // to format the request. It returns an HTTP response that the caller must
-// decode with a JSON decoder. If auth is provided, non-nil slice with two
-// values, the first one being the username and the second one being the
-// password, an authentication is made.
-func (api *API) lookup(namespace string, auth []string, search map[string]interface{}) (*http.Response, error) {
-	url := formatURL(api.URL, namespace, search)
+// decode with a JSON decoder.
+func (api *API) lookup(namespace string, search map[string]interface{}) (*http.Response, error) {
+	url := formatURL(api.url, namespace, search)
 	if url == "" {
 		return nil, ErrBuildingURL
 	}
@@ -102,8 +143,8 @@ func (api *API) lookup(namespace string, auth []string, search map[string]interf
 	}
 
 	// If auth credentials are provided, use them
-	if (auth != nil) && (len(auth) == 2) {
-		request.SetBasicAuth(auth[0], auth[1])
+	if (api.authLogin != "") && (api.authPassword != "") {
+		request.SetBasicAuth(api.authLogin, api.authPassword)
 	}
 
 	// Send the request to the API using a simple HTTP client

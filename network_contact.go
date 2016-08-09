@@ -37,7 +37,7 @@ type NetworkContact struct {
 // if something went wrong.
 func (api *API) getNetworkContactResource(search map[string]interface{}) (*NetworkContactResource, error) {
 	// Get the NetworkContactResource from the API
-	response, err := api.lookup(networkContactNamespace, nil, search)
+	response, err := api.lookup(networkContactNamespace, search)
 	if err != nil {
 		return nil, err
 	}

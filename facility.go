@@ -47,7 +47,7 @@ type Facility struct {
 // something went wrong.
 func (api *API) getFacilityResource(search map[string]interface{}) (*FacilityResource, error) {
 	// Get the FacilityResource from the API
-	response, err := api.lookup(facilityNamespace, nil, search)
+	response, err := api.lookup(facilityNamespace, search)
 	if err != nil {
 		return nil, err
 	}

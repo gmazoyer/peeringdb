@@ -50,7 +50,7 @@ type InternetExchange struct {
 // if something went wrong.
 func (api *API) getInternetExchangeResource(search map[string]interface{}) (*InternetExchangeResource, error) {
 	// Get the InternetExchangeResource from the API
-	response, err := api.lookup(internetExchangeNamespace, nil, search)
+	response, err := api.lookup(internetExchangeNamespace, search)
 	if err != nil {
 		return nil, err
 	}
@@ -163,7 +163,7 @@ type InternetExchangeLAN struct {
 // response. An error can be returned if  something went wrong.
 func (api *API) getInternetExchangeLANResource(search map[string]interface{}) (*InternetExchangeLANResource, error) {
 	// Get the InternetExchangeLANResource from the API
-	response, err := api.lookup(internetExchangeLANNamespace, nil, search)
+	response, err := api.lookup(internetExchangeLANNamespace, search)
 	if err != nil {
 		return nil, err
 	}
@@ -270,7 +270,7 @@ type InternetExchangePrefix struct {
 // response. An error can be returned if something went wrong.
 func (api *API) getInternetExchangePrefixResource(search map[string]interface{}) (*InternetExchangePrefixResource, error) {
 	// Get the InternetExchangePrefixResource from the API
-	response, err := api.lookup(internetExchangePrefixNamespace, nil, search)
+	response, err := api.lookup(internetExchangePrefixNamespace, search)
 	if err != nil {
 		return nil, err
 	}
@@ -380,7 +380,7 @@ type InternetExchangeFacility struct {
 // response. An error can be returned if something went wrong.
 func (api *API) getInternetExchangeFacilityResource(search map[string]interface{}) (*InternetExchangeFacilityResource, error) {
 	// Get the InternetExchangeFacilityResource from the API
-	response, err := api.lookup(internetExchangeFacilityNamespace, nil, search)
+	response, err := api.lookup(internetExchangeFacilityNamespace, search)
 	if err != nil {
 		return nil, err
 	}

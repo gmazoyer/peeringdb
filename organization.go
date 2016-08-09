@@ -43,7 +43,7 @@ type Organization struct {
 // if something went wrong.
 func (api *API) getOrganizationResource(search map[string]interface{}) (*OrganizationResource, error) {
 	// Get the OrganizationResource from the API
-	response, err := api.lookup(organizationNamespace, nil, search)
+	response, err := api.lookup(organizationNamespace, search)
 	if err != nil {
 		return nil, err
 	}
