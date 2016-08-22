@@ -5,11 +5,11 @@ import (
 	"time"
 )
 
-// OrganizationResource is the top-level structure when parsing the JSON output
+// organizationResource is the top-level structure when parsing the JSON output
 // from the API. This structure is not used if the Organization JSON object is
 // included as a field in another JSON object. This structure is used only if
 // the proper namespace is queried.
-type OrganizationResource struct {
+type organizationResource struct {
 	Meta struct {
 		Generated float64 `json:"generated,omitempty"`
 	} `json:"meta"`
@@ -38,10 +38,10 @@ type Organization struct {
 	Status              string    `json:"status"`
 }
 
-// getOrganizationResource returns a pointer to an OrganizationResource
+// getOrganizationResource returns a pointer to an organizationResource
 // structure corresponding to the API JSON response. An error can be returned
 // if something went wrong.
-func (api *API) getOrganizationResource(search map[string]interface{}) (*OrganizationResource, error) {
+func (api *API) getOrganizationResource(search map[string]interface{}) (*organizationResource, error) {
 	// Get the OrganizationResource from the API
 	response, err := api.lookup(organizationNamespace, search)
 	if err != nil {
@@ -52,7 +52,7 @@ func (api *API) getOrganizationResource(search map[string]interface{}) (*Organiz
 	defer response.Body.Close()
 
 	// Decode what the API has given to us
-	resource := &OrganizationResource{}
+	resource := &organizationResource{}
 	err = json.NewDecoder(response.Body).Decode(&resource)
 	if err != nil {
 		return nil, err

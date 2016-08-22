@@ -5,11 +5,11 @@ import (
 	"time"
 )
 
-// NetworkContactResource is the top-level structure when parsing the JSON
+// networkContactResource is the top-level structure when parsing the JSON
 // output from the API. This structure is not used if the NetworkContact JSON
 // object is included as a field in another JSON object. This structure is used
 // only if the proper namespace is queried.
-type NetworkContactResource struct {
+type networkContactResource struct {
 	Meta struct {
 		Generated float64 `json:"generated,omitempty"`
 	} `json:"meta"`
@@ -32,10 +32,10 @@ type NetworkContact struct {
 	Status    string    `json:"status"`
 }
 
-// getNetworkContactResource returns a pointer to an NetworkContactResource
+// getNetworkContactResource returns a pointer to an networkContactResource
 // structure corresponding to the API JSON response. An error can be returned
 // if something went wrong.
-func (api *API) getNetworkContactResource(search map[string]interface{}) (*NetworkContactResource, error) {
+func (api *API) getNetworkContactResource(search map[string]interface{}) (*networkContactResource, error) {
 	// Get the NetworkContactResource from the API
 	response, err := api.lookup(networkContactNamespace, search)
 	if err != nil {
@@ -46,7 +46,7 @@ func (api *API) getNetworkContactResource(search map[string]interface{}) (*Netwo
 	defer response.Body.Close()
 
 	// Decode what the API has given to us
-	resource := &NetworkContactResource{}
+	resource := &networkContactResource{}
 	err = json.NewDecoder(response.Body).Decode(&resource)
 	if err != nil {
 		return nil, err

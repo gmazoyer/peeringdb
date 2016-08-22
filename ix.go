@@ -5,11 +5,11 @@ import (
 	"time"
 )
 
-// InternetExchangeResource is the top-level structure when parsing the JSON
+// internetExchangeResource is the top-level structure when parsing the JSON
 // output from the API. This structure is not used if the InternetExchange JSON
 // object is included as a field in another JSON object. This structure is used
 // only if the proper namespace is queried.
-type InternetExchangeResource struct {
+type internetExchangeResource struct {
 	Meta struct {
 		Generated float64 `json:"generated,omitempty"`
 	} `json:"meta"`
@@ -45,10 +45,10 @@ type InternetExchange struct {
 	Status                 string       `json:"status"`
 }
 
-// getInternetExchangeResource returns a pointer to an InternetExchangeResource
+// getInternetExchangeResource returns a pointer to an internetExchangeResource
 // structure corresponding to the API JSON response. An error can be returned
 // if something went wrong.
-func (api *API) getInternetExchangeResource(search map[string]interface{}) (*InternetExchangeResource, error) {
+func (api *API) getInternetExchangeResource(search map[string]interface{}) (*internetExchangeResource, error) {
 	// Get the InternetExchangeResource from the API
 	response, err := api.lookup(internetExchangeNamespace, search)
 	if err != nil {
@@ -59,7 +59,7 @@ func (api *API) getInternetExchangeResource(search map[string]interface{}) (*Int
 	defer response.Body.Close()
 
 	// Decode what the API has given to us
-	resource := &InternetExchangeResource{}
+	resource := &internetExchangeResource{}
 	err = json.NewDecoder(response.Body).Decode(&resource)
 	if err != nil {
 		return nil, err
@@ -127,11 +127,11 @@ func (api *API) GetInternetExchangeByID(id int) (*InternetExchange, error) {
 	return &(*internetExchanges)[0], nil
 }
 
-// InternetExchangeLANResource is the top-level structure when parsing the JSON
+// internetExchangeLANResource is the top-level structure when parsing the JSON
 // output from the API. This structure is not used if the InternetExchangeLAN
 // JSON object is included as a field in another JSON object. This structure is
 // used only if the proper namespace is queried.
-type InternetExchangeLANResource struct {
+type internetExchangeLANResource struct {
 	Meta struct {
 		Generated float64 `json:"generated,omitempty"`
 	} `json:"meta"`
@@ -159,9 +159,9 @@ type InternetExchangeLAN struct {
 }
 
 // getInternetExchangeLANResource returns a pointer to an
-// InternetExchangeLANResource structure corresponding to the API JSON
+// internetExchangeLANResource structure corresponding to the API JSON
 // response. An error can be returned if  something went wrong.
-func (api *API) getInternetExchangeLANResource(search map[string]interface{}) (*InternetExchangeLANResource, error) {
+func (api *API) getInternetExchangeLANResource(search map[string]interface{}) (*internetExchangeLANResource, error) {
 	// Get the InternetExchangeLANResource from the API
 	response, err := api.lookup(internetExchangeLANNamespace, search)
 	if err != nil {
@@ -172,7 +172,7 @@ func (api *API) getInternetExchangeLANResource(search map[string]interface{}) (*
 	defer response.Body.Close()
 
 	// Decode what the API has given to us
-	resource := &InternetExchangeLANResource{}
+	resource := &internetExchangeLANResource{}
 	err = json.NewDecoder(response.Body).Decode(&resource)
 	if err != nil {
 		return nil, err
@@ -241,11 +241,11 @@ func (api *API) GetInternetExchangeLANByID(id int) (*InternetExchangeLAN, error)
 	return &(*ixLANs)[0], nil
 }
 
-// InternetExchangePrefixResource is the top-level structure when parsing the
+// internetExchangePrefixResource is the top-level structure when parsing the
 // JSON output from the API. This structure is not used if the
 // InternetExchangePrefix JSON object is included as a field in another JSON
 // object. This structure is used only if the proper namespace is queried.
-type InternetExchangePrefixResource struct {
+type internetExchangePrefixResource struct {
 	Meta struct {
 		Generated float64 `json:"generated,omitempty"`
 	} `json:"meta"`
@@ -266,9 +266,9 @@ type InternetExchangePrefix struct {
 }
 
 // getInternetExchangePrefixResource returns a pointer to an
-// InternetExchangePrefixResource structure corresponding to the API JSON
+// internetExchangePrefixResource structure corresponding to the API JSON
 // response. An error can be returned if something went wrong.
-func (api *API) getInternetExchangePrefixResource(search map[string]interface{}) (*InternetExchangePrefixResource, error) {
+func (api *API) getInternetExchangePrefixResource(search map[string]interface{}) (*internetExchangePrefixResource, error) {
 	// Get the InternetExchangePrefixResource from the API
 	response, err := api.lookup(internetExchangePrefixNamespace, search)
 	if err != nil {
@@ -279,7 +279,7 @@ func (api *API) getInternetExchangePrefixResource(search map[string]interface{})
 	defer response.Body.Close()
 
 	// Decode what the API has given to us
-	resource := &InternetExchangePrefixResource{}
+	resource := &internetExchangePrefixResource{}
 	err = json.NewDecoder(response.Body).Decode(&resource)
 	if err != nil {
 		return nil, err
@@ -349,11 +349,11 @@ func (api *API) GetInternetExchangePrefixByID(id int) (*InternetExchangePrefix, 
 	return &(*ixPrefixes)[0], nil
 }
 
-// InternetExchangeFacilityResource is the top-level structure when parsing the
+// internetExchangeFacilityResource is the top-level structure when parsing the
 // JSON output from the API. This structure is not used if the
 // InternetExchangeFacility JSON object is included as a field in another JSON
 // object. This structure is used only if the proper namespace is queried.
-type InternetExchangeFacilityResource struct {
+type internetExchangeFacilityResource struct {
 	Meta struct {
 		Generated float64 `json:"generated,omitempty"`
 	} `json:"meta"`
@@ -376,9 +376,9 @@ type InternetExchangeFacility struct {
 }
 
 // getInternetExchangeFacilityResource returns a pointer to an
-// InternetExchangeFacilityResource structure corresponding to the API JSON
+// internetExchangeFacilityResource structure corresponding to the API JSON
 // response. An error can be returned if something went wrong.
-func (api *API) getInternetExchangeFacilityResource(search map[string]interface{}) (*InternetExchangeFacilityResource, error) {
+func (api *API) getInternetExchangeFacilityResource(search map[string]interface{}) (*internetExchangeFacilityResource, error) {
 	// Get the InternetExchangeFacilityResource from the API
 	response, err := api.lookup(internetExchangeFacilityNamespace, search)
 	if err != nil {
@@ -389,7 +389,7 @@ func (api *API) getInternetExchangeFacilityResource(search map[string]interface{
 	defer response.Body.Close()
 
 	// Decode what the API has given to us
-	resource := &InternetExchangeFacilityResource{}
+	resource := &internetExchangeFacilityResource{}
 	err = json.NewDecoder(response.Body).Decode(&resource)
 	if err != nil {
 		return nil, err

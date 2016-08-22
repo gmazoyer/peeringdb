@@ -5,11 +5,11 @@ import (
 	"time"
 )
 
-// FacilityResource is the top-level structure when parsing the JSON output
+// facilityResource is the top-level structure when parsing the JSON output
 // from the API. This structure is not used if the Facility JSON object is
 // included as a field in another JSON object. This structure is used only if
 // the proper namespace is queried.
-type FacilityResource struct {
+type facilityResource struct {
 	Meta struct {
 		Generated float64 `json:"generated,omitempty"`
 	} `json:"meta"`
@@ -42,10 +42,10 @@ type Facility struct {
 	Zipcode          string       `json:"zipcode"`
 }
 
-// getFacilityResource returns a pointer to a FacilityResource structure
+// getFacilityResource returns a pointer to a facilityResource structure
 // corresponding to the API JSON response. An error can be returned if
 // something went wrong.
-func (api *API) getFacilityResource(search map[string]interface{}) (*FacilityResource, error) {
+func (api *API) getFacilityResource(search map[string]interface{}) (*facilityResource, error) {
 	// Get the FacilityResource from the API
 	response, err := api.lookup(facilityNamespace, search)
 	if err != nil {
@@ -56,7 +56,7 @@ func (api *API) getFacilityResource(search map[string]interface{}) (*FacilityRes
 	defer response.Body.Close()
 
 	// Decode what the API has given to us
-	resource := &FacilityResource{}
+	resource := &facilityResource{}
 	err = json.NewDecoder(response.Body).Decode(&resource)
 	if err != nil {
 		return nil, err

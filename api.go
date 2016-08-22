@@ -37,18 +37,18 @@ var (
 // main structure of this package. All functions to make API calls are
 // associated to this structure.
 type API struct {
-	url          string
-	authLogin    string
-	authPassword string
+	url      string
+	login    string
+	password string
 }
 
 // NewAPI returns a pointer to a new API structure. It uses the publicly known
 // PeeringDB API endpoint.
 func NewAPI() *API {
 	return &API{
-		url:          baseAPI,
-		authLogin:    "",
-		authPassword: "",
+		url:      baseAPI,
+		login:    "",
+		password: "",
 	}
 }
 
@@ -57,9 +57,9 @@ func NewAPI() *API {
 // and password to attempt an authentication while making API calls.
 func NewAPIWithAuth(login, password string) *API {
 	return &API{
-		url:          baseAPI,
-		authLogin:    login,
-		authPassword: password,
+		url:      baseAPI,
+		login:    login,
+		password: password,
 	}
 }
 
@@ -71,9 +71,9 @@ func NewAPIFromURL(url string) *API {
 	}
 
 	return &API{
-		url:          url,
-		authLogin:    "",
-		authPassword: "",
+		url:      url,
+		login:    "",
+		password: "",
 	}
 }
 
@@ -87,9 +87,9 @@ func NewAPIFromURLWithAuth(url, login, password string) *API {
 	}
 
 	return &API{
-		url:          url,
-		authLogin:    login,
-		authPassword: password,
+		url:      url,
+		login:    login,
+		password: password,
 	}
 }
 
@@ -143,8 +143,8 @@ func (api *API) lookup(namespace string, search map[string]interface{}) (*http.R
 	}
 
 	// If auth credentials are provided, use them
-	if (api.authLogin != "") && (api.authPassword != "") {
-		request.SetBasicAuth(api.authLogin, api.authPassword)
+	if (api.login != "") && (api.password != "") {
+		request.SetBasicAuth(api.login, api.password)
 	}
 
 	// Send the request to the API using a simple HTTP client

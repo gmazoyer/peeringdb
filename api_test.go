@@ -149,11 +149,11 @@ func TestNewAPIWithAuth(t *testing.T) {
 	if api.url != expectedURL {
 		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
 	}
-	if api.authLogin != expectedLogin {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedLogin, api.authLogin)
+	if api.login != expectedLogin {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedLogin, api.login)
 	}
-	if api.authPassword != expectedPassword {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedPassword, api.authPassword)
+	if api.password != expectedPassword {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedPassword, api.password)
 	}
 }
 
@@ -190,11 +190,11 @@ func TestNewAPIFromURLWithAuth(t *testing.T) {
 	if api.url != expectedURL {
 		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
 	}
-	if api.authLogin != expectedLogin {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedLogin, api.authLogin)
+	if api.login != expectedLogin {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedLogin, api.login)
 	}
-	if api.authPassword != expectedPassword {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedPassword, api.authPassword)
+	if api.password != expectedPassword {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedPassword, api.password)
 	}
 
 	// Test with
@@ -205,11 +205,11 @@ func TestNewAPIFromURLWithAuth(t *testing.T) {
 	if api.url != expectedURL {
 		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
 	}
-	if api.authLogin != expectedLogin {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedLogin, api.authLogin)
+	if api.login != expectedLogin {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedLogin, api.login)
 	}
-	if api.authPassword != expectedPassword {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedPassword, api.authPassword)
+	if api.password != expectedPassword {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedPassword, api.password)
 	}
 }
 

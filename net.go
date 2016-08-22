@@ -5,11 +5,11 @@ import (
 	"time"
 )
 
-// NetworkResource is the top-level structure when parsing the JSON output from
+// networkResource is the top-level structure when parsing the JSON output from
 // the API. This structure is not used if the Network JSON object is included
 // as a field in another JSON object. This structure is used only if the proper
 // namespace is queried.
-type NetworkResource struct {
+type networkResource struct {
 	Meta struct {
 		Generated float64 `json:"generated,omitempty"`
 	} `json:"meta"`
@@ -54,10 +54,10 @@ type Network struct {
 	Status                        string       `json:"status"`
 }
 
-// getNetworkResource returns a pointer to an NetworkResource structure
+// getNetworkResource returns a pointer to an networkResource structure
 // corresponding to the API JSON response. An error can be returned if
 // something went wrong.
-func (api *API) getNetworkResource(search map[string]interface{}) (*NetworkResource, error) {
+func (api *API) getNetworkResource(search map[string]interface{}) (*networkResource, error) {
 	// Get the NetworkResource from the API
 	response, err := api.lookup(networkNamespace, search)
 	if err != nil {
@@ -68,7 +68,7 @@ func (api *API) getNetworkResource(search map[string]interface{}) (*NetworkResou
 	defer response.Body.Close()
 
 	// Decode what the API has given to us
-	resource := &NetworkResource{}
+	resource := &networkResource{}
 	err = json.NewDecoder(response.Body).Decode(&resource)
 	if err != nil {
 		return nil, err
@@ -135,11 +135,11 @@ func (api *API) GetNetworkByID(id int) (*Network, error) {
 	return &(*networks)[0], nil
 }
 
-// NetworkFacilityResource is the top-level structure when parsing the JSON
+// networkFacilityResource is the top-level structure when parsing the JSON
 // output from the API. This structure is not used if the NetFacility JSON
 // object is included as a field in another JSON object. This structure is used
 // only if the proper namespace is queried.
-type NetworkFacilityResource struct {
+type networkFacilityResource struct {
 	Meta struct {
 		Generated float64 `json:"generated,omitempty"`
 	} `json:"meta"`
@@ -164,10 +164,10 @@ type NetworkFacility struct {
 	Status     string    `json:"status"`
 }
 
-// getNetworkFacilityResource returns a pointer to an NetworkFacilityResource
+// getNetworkFacilityResource returns a pointer to an networkFacilityResource
 // structure corresponding to the API JSON response. An error can be returned
 // if something went wrong.
-func (api *API) getNetworkFacilityResource(search map[string]interface{}) (*NetworkFacilityResource, error) {
+func (api *API) getNetworkFacilityResource(search map[string]interface{}) (*networkFacilityResource, error) {
 	// Get the NetworkFacilityResource from the API
 	response, err := api.lookup(networkFacilityNamespace, search)
 	if err != nil {
@@ -178,7 +178,7 @@ func (api *API) getNetworkFacilityResource(search map[string]interface{}) (*Netw
 	defer response.Body.Close()
 
 	// Decode what the API has given to us
-	resource := &NetworkFacilityResource{}
+	resource := &networkFacilityResource{}
 	err = json.NewDecoder(response.Body).Decode(&resource)
 	if err != nil {
 		return nil, err
@@ -246,11 +246,11 @@ func (api *API) GetNetworkFacilityByID(id int) (*NetworkFacility, error) {
 	return &(*networkFacilities)[0], nil
 }
 
-// NetworkInternetExchangeLANResource is the top-level structure when parsing
+// networkInternetExchangeLANResource is the top-level structure when parsing
 // the JSON output from the API. This structure is not used if the
 // NetworkInternetExchangeLAN JSON object is included as a field in another
 // JSON object. This structure is used only if the proper namespace is queried.
-type NetworkInternetExchangeLANResource struct {
+type networkInternetExchangeLANResource struct {
 	Meta struct {
 		Generated float64 `json:"generated,omitempty"`
 	} `json:"meta"`
@@ -279,9 +279,9 @@ type NetworkInternetExchangeLAN struct {
 }
 
 // getNetworkInternetExchangeLANResource returns a pointer to an
-// NetworkInternetExchangeLANResource structure corresponding to the API JSON
+// networkInternetExchangeLANResource structure corresponding to the API JSON
 // response. An error can be returned if something went wrong.
-func (api *API) getNetworkInternetExchangeLANResource(search map[string]interface{}) (*NetworkInternetExchangeLANResource, error) {
+func (api *API) getNetworkInternetExchangeLANResource(search map[string]interface{}) (*networkInternetExchangeLANResource, error) {
 	// Get the NetworkInternetExchangeLANResource from the API
 	response, err := api.lookup(networkInternetExchangeLANNamepsace, search)
 	if err != nil {
@@ -292,7 +292,7 @@ func (api *API) getNetworkInternetExchangeLANResource(search map[string]interfac
 	defer response.Body.Close()
 
 	// Decode what the API has given to us
-	resource := &NetworkInternetExchangeLANResource{}
+	resource := &networkInternetExchangeLANResource{}
 	err = json.NewDecoder(response.Body).Decode(&resource)
 	if err != nil {
 		return nil, err
