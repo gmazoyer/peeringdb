@@ -85,7 +85,7 @@ func (api *API) GetNetwork(search map[string]interface{}) (*[]Network, error) {
 	// Ask for the all Network objects
 	networkResource, err := api.getNetworkResource(search)
 
-	// Error as occured while querying the API
+	// Error as occurred while querying the API
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +104,7 @@ func (api *API) GetAllNetworks() (*[]Network, error) {
 
 // GetNetworkByID returns a pointer to a Network structure that matches the
 // given ID. If the ID is lesser than 0, it will return nil. The returned error
-// will be non-nil if an issue as occured while trying to query the API. If for
+// will be non-nil if an issue as occurred while trying to query the API. If for
 // some reasons the API returns more than one object for the given ID (but it
 // must not) only the first will be used for the returned value.
 func (api *API) GetNetworkByID(id int) (*Network, error) {
@@ -120,7 +120,7 @@ func (api *API) GetNetworkByID(id int) (*Network, error) {
 	// Actually ask for it
 	networks, err := api.GetNetwork(search)
 
-	// Error as occured while querying the API
+	// Error as occurred while querying the API
 	if err != nil {
 		return nil, err
 	}
@@ -195,7 +195,7 @@ func (api *API) GetNetworkFacility(search map[string]interface{}) (*[]NetworkFac
 	// Ask for the all NetworkFacility objects
 	networkFacilityResource, err := api.getNetworkFacilityResource(search)
 
-	// Error as occured while querying the API
+	// Error as occurred while querying the API
 	if err != nil {
 		return nil, err
 	}
@@ -214,7 +214,7 @@ func (api *API) GetAllNetworkFacilities() (*[]NetworkFacility, error) {
 
 // GetNetworkFacilityByID returns a pointer to a NetworkFacility structure that
 // matches the given ID. If the ID is lesser than 0, it will return nil. The
-// returned error will be non-nil if an issue as occured while trying to query
+// returned error will be non-nil if an issue as occurred while trying to query
 // the API. If for some reasons the API returns more than one object for the
 // given ID (but it must not) only the first will be used for the returned
 // value.
@@ -231,7 +231,7 @@ func (api *API) GetNetworkFacilityByID(id int) (*NetworkFacility, error) {
 	// Actually ask for it
 	networkFacilities, err := api.GetNetworkFacility(search)
 
-	// Error as occured while querying the API
+	// Error as occurred while querying the API
 	if err != nil {
 		return nil, err
 	}
@@ -310,7 +310,7 @@ func (api *API) GetNetworkInternetExchangeLAN(search map[string]interface{}) (*[
 	// Ask for the all NetInternetExchangeLAN objects
 	networkInternetExchangeLANResource, err := api.getNetworkInternetExchangeLANResource(search)
 
-	// Error as occured while querying the API
+	// Error as occurred while querying the API
 	if err != nil {
 		return nil, err
 	}
@@ -331,7 +331,7 @@ func (api *API) GetAllNetworkInternetExchangeLANs() (*[]NetworkInternetExchangeL
 // GetNetworkInternetExchangeLANByID returns a pointer to a
 // NetworkInternetExchangeLAN structure that matches the given ID. If the ID is
 // lesser than 0, it will return nil. The returned error will be non-nil if an
-// issue as occured while trying to query the API. If for some reasons the API
+// issue as occurred while trying to query the API. If for some reasons the API
 // returns more than one object for the given ID (but it must not) only the
 // first will be used for the returned value.
 func (api *API) GetNetworkInternetExchangeLANByID(id int) (*NetworkInternetExchangeLAN, error) {
@@ -347,7 +347,7 @@ func (api *API) GetNetworkInternetExchangeLANByID(id int) (*NetworkInternetExcha
 	// Actually ask for it
 	networkInternetExchangeLANs, err := api.GetNetworkInternetExchangeLAN(search)
 
-	// Error as occured while querying the API
+	// Error as occurred while querying the API
 	if err != nil {
 		return nil, err
 	}

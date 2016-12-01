@@ -12,7 +12,7 @@ func Example() {
 	// Get the organization, pointer to slice returned
 	organizations, err := api.GetOrganization(search)
 
-	// If an error as occured, print it
+	// If an error as occurred, print it
 	if err != nil {
 		fmt.Println(err)
 		return

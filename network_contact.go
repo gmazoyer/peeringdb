@@ -63,7 +63,7 @@ func (api *API) GetNetworkContact(search map[string]interface{}) (*[]NetworkCont
 	// Ask for the all NetworkContact objects
 	networkContactResource, err := api.getNetworkContactResource(search)
 
-	// Error as occured while querying the API
+	// Error as occurred while querying the API
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func (api *API) GetAllNetworkContacts() (*[]NetworkContact, error) {
 
 // GetNetworkContactByID returns a pointer to a NetworkContact structure that
 // matches the given ID. If the ID is lesser than 0, it will return nil. The
-// returned error will be non-nil if an issue as occured while trying to query
+// returned error will be non-nil if an issue as occurred while trying to query
 // the API. If for some reasons the API returns more than one object for the
 // given ID (but it must not) only the first will be used for the returned
 // value.
@@ -99,7 +99,7 @@ func (api *API) GetNetworkContactByID(id int) (*NetworkContact, error) {
 	// Actually ask for it
 	networkContacts, err := api.GetNetworkContact(search)
 
-	// Error as occured while querying the API
+	// Error as occurred while querying the API
 	if err != nil {
 		return nil, err
 	}

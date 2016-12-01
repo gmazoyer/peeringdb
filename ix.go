@@ -76,7 +76,7 @@ func (api *API) GetInternetExchange(search map[string]interface{}) (*[]InternetE
 	// Ask for the all InternetExchange objects
 	internetExchangeResource, err := api.getInternetExchangeResource(search)
 
-	// Error as occured while querying the API
+	// Error as occurred while querying the API
 	if err != nil {
 		return nil, err
 	}
@@ -95,7 +95,7 @@ func (api *API) GetAllInternetExchanges() (*[]InternetExchange, error) {
 
 // GetInternetExchangeByID returns a pointer to a InternetExchange structure
 // that matches the given ID. If the ID is lesser than 0, it will return nil.
-// The returned error will be non-nil if an issue as occured while trying to
+// The returned error will be non-nil if an issue as occurred while trying to
 // query the API. If for some reasons the API returns more than one object for
 // the given ID (but it must not) only the first will be used for the returned
 // value.
@@ -112,7 +112,7 @@ func (api *API) GetInternetExchangeByID(id int) (*InternetExchange, error) {
 	// Actually ask for it
 	internetExchanges, err := api.GetInternetExchange(search)
 
-	// Error as occured while querying the API
+	// Error as occurred while querying the API
 	if err != nil {
 		return nil, err
 	}
@@ -189,7 +189,7 @@ func (api *API) GetInternetExchangeLAN(search map[string]interface{}) (*[]Intern
 	// Ask for the all InternetExchangeLAN objects
 	internetExchangeLANResource, err := api.getInternetExchangeLANResource(search)
 
-	// Error as occured while querying the API
+	// Error as occurred while querying the API
 	if err != nil {
 		return nil, err
 	}
@@ -209,7 +209,7 @@ func (api *API) GetAllInternetExchangeLANs() (*[]InternetExchangeLAN, error) {
 
 // GetInternetExchangeLANByID returns a pointer to a InternetExchangeLAN
 // structure that matches the given ID. If the ID is lesser than 0, it will
-// return nil. The returned error will be non-nil if an issue as occured while
+// return nil. The returned error will be non-nil if an issue as occurred while
 // trying to query the API. If for some reasons the API returns more than one
 // object for the given ID (but it must not) only the first will be used for
 // the returned value.
@@ -226,7 +226,7 @@ func (api *API) GetInternetExchangeLANByID(id int) (*InternetExchangeLAN, error)
 	// Actually ask for it
 	ixLANs, err := api.GetInternetExchangeLAN(search)
 
-	// Error as occured while querying the API
+	// Error as occurred while querying the API
 	if err != nil {
 		return nil, err
 	}
@@ -297,7 +297,7 @@ func (api *API) GetInternetExchangePrefix(search map[string]interface{}) (*[]Int
 	// Ask for the all InternetExchangePrefix objects
 	internetExchangePrefixResource, err := api.getInternetExchangePrefixResource(search)
 
-	// Error as occured while querying the API
+	// Error as occurred while querying the API
 	if err != nil {
 		return nil, err
 	}
@@ -317,7 +317,7 @@ func (api *API) GetAllInternetExchangePrefixes() (*[]InternetExchangePrefix, err
 
 // GetInternetExchangePrefixByID returns a pointer to a InternetExchangePrefix
 // structure that matches the given ID. If the ID is lesser than 0, it will
-// return nil. The returned error will be non-nil if an issue as occured while
+// return nil. The returned error will be non-nil if an issue as occurred while
 // trying to query the API. If for some reasons the API returns more than one
 // object for the given ID (but it must not) only the first will be used for
 // the returned value.
@@ -334,7 +334,7 @@ func (api *API) GetInternetExchangePrefixByID(id int) (*InternetExchangePrefix, 
 	// Actually ask for it
 	ixPrefixes, err := api.GetInternetExchangePrefix(search)
 
-	// Error as occured while querying the API
+	// Error as occurred while querying the API
 	if err != nil {
 		return nil, err
 	}
@@ -407,7 +407,7 @@ func (api *API) GetInternetExchangeFacility(search map[string]interface{}) (*[]I
 	// Ask for the all InternetExchangeFacility objects
 	internetExchangeFacilityResource, err := api.getInternetExchangeFacilityResource(search)
 
-	// Error as occured while querying the API
+	// Error as occurred while querying the API
 	if err != nil {
 		return nil, err
 	}
@@ -429,7 +429,7 @@ func (api *API) GetAllInternetExchangeFacilities() (*[]InternetExchangeFacility,
 // GetInternetExchangeFacilityByID returns a pointer to a
 // InternetExchangeFacility structure that matches the given ID. If the ID is
 // lesser than 0, it will return nil. The returned error will be non-nil if an
-// issue as occured while trying to query the API. If for some reasons the API
+// issue as occurred while trying to query the API. If for some reasons the API
 // returns more than one object for the given ID (but it must not) only the
 // first will be used for the returned value.
 func (api *API) GetInternetExchangeFacilityByID(id int) (*InternetExchangeFacility, error) {
@@ -445,7 +445,7 @@ func (api *API) GetInternetExchangeFacilityByID(id int) (*InternetExchangeFacili
 	// Actually ask for it
 	ixFacilities, err := api.GetInternetExchangeFacility(search)
 
-	// Error as occured while querying the API
+	// Error as occurred while querying the API
 	if err != nil {
 		return nil, err
 	}

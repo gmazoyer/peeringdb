@@ -73,7 +73,7 @@ func (api *API) GetFacility(search map[string]interface{}) (*[]Facility, error) 
 	// Ask for the all Facility objects
 	facilyResource, err := api.getFacilityResource(search)
 
-	// Error as occured while querying the API
+	// Error as occurred while querying the API
 	if err != nil {
 		return nil, err
 	}
@@ -92,7 +92,7 @@ func (api *API) GetAllFacilities() (*[]Facility, error) {
 
 // GetFacilityByID returns a pointer to a Facility structure that matches the
 // given ID. If the ID is lesser than 0, it will return nil. The returned error
-// will be non-nil if an issue as occured while trying to query the API. If for
+// will be non-nil if an issue as occurred while trying to query the API. If for
 // some reasons the API returns more than one object for the given ID (but it
 // must not) only the first will be used for the returned value.
 func (api *API) GetFacilityByID(id int) (*Facility, error) {
@@ -108,7 +108,7 @@ func (api *API) GetFacilityByID(id int) (*Facility, error) {
 	// Actually ask for it
 	facilities, err := api.GetFacility(search)
 
-	// Error as occured while querying the API
+	// Error as occurred while querying the API
 	if err != nil {
 		return nil, err
 	}
