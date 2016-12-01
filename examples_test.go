@@ -47,7 +47,7 @@ func Example() {
 			}
 		}
 	}
-	// Output: LUXNETWORK S.A.
+	// Output: LuxNetwork S.A.
 }
 
 func ExampleAPI_GetASN() {
