@@ -154,6 +154,8 @@ type InternetExchangeLAN struct {
 	NetworkSet                []int            `json:"net_set"`
 	InternetExchangePrefixSet []int            `json:"ixpfx_set"`
 	Status                    string           `json:"status"`
+	IXFURL                    string           `json:"ixf_ixp_member_list_url"`
+	IXFURLVisibility          string           `json:"ixf_ixp_member_list_url_visible"`
 	Updated                   time.Time        `json:"updated"`
 	Created                   time.Time        `json:"created"`
 }
