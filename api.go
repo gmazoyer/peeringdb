@@ -40,6 +40,7 @@ type API struct {
 	url      string
 	login    string
 	password string
+	apiKey   string
 }
 
 // NewAPI returns a pointer to a new API structure. It uses the publicly known
@@ -60,6 +61,16 @@ func NewAPIWithAuth(login, password string) *API {
 		url:      baseAPI,
 		login:    login,
 		password: password,
+	}
+}
+
+// NewAPIWithAuth returns a pointer to a new API structure. The API will point
+// to the publicly known PeeringDB API endpoint and will use the provided login
+// and password to attempt an authentication while making API calls.
+func NewAPIWithAPIKey(apiKey string) *API {
+	return &API{
+		url:    baseAPI,
+		apiKey: apiKey,
 	}
 }
 
@@ -145,6 +156,10 @@ func (api *API) lookup(namespace string, search map[string]interface{}) (*http.R
 	// If auth credentials are provided, use them
 	if (api.login != "") && (api.password != "") {
 		request.SetBasicAuth(api.login, api.password)
+	}
+
+	if api.apiKey != "" {
+		request.Header.Add("Authorization", fmt.Sprintf("Api-Key %s", api.apiKey))
 	}
 
 	// Send the request to the API using a simple HTTP client
