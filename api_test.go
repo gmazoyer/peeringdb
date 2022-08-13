@@ -215,7 +215,7 @@ func TestNewAPIFromURLWithAuth(t *testing.T) {
 
 func TestGetASN(t *testing.T) {
 	api := NewAPI()
-	expectedASN := 29467
+	expectedASN := 201281
 	net := api.GetASN(expectedASN)
 
 	if net.ASN != expectedASN {

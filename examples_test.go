@@ -7,7 +7,7 @@ func Example() {
 
 	// Look for the organization given a name
 	search := make(map[string]interface{})
-	search["name"] = "LuxNetwork S.A."
+	search["name"] = "Guillaume Mazoyer"
 
 	// Get the organization, pointer to slice returned
 	organizations, err := api.GetOrganization(search)
@@ -47,16 +47,16 @@ func Example() {
 			}
 		}
 	}
-	// Output: LuxNetwork S.A.
+	// Output: Guillaume Mazoyer
 }
 
 func ExampleAPI_GetASN() {
 	api := NewAPI()
-	as29467 := api.GetASN(29467)
+	as201281 := api.GetASN(201281)
 
-	fmt.Printf("Name:      %s\n", as29467.Name)
-	fmt.Printf("AS number: %d\n", as29467.ASN)
+	fmt.Printf("Name: %s\n", as201281.Name)
+	fmt.Printf("ASN:  %d\n", as201281.ASN)
 	// Output:
-	// Name:      LuxNetwork S.A.
-	// AS number: 29467
+	// Name: Guillaume Mazoyer
+	// ASN:  201281
 }
