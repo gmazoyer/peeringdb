@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	baseAPI                             = "https://peeringdb.com/api/"
+	baseAPI                             = "https://www.peeringdb.com/api/"
 	facilityNamespace                   = "fac"
 	internetExchangeNamespace           = "ix"
 	internetExchangeFacilityNamespace   = "ixfac"
