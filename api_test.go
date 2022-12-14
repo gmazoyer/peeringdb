@@ -127,10 +127,9 @@ func TestFormatURL(t *testing.T) {
 
 func TestNewAPI(t *testing.T) {
 	var expectedURL string
-	var api *API
 
 	// Test to use the public PeeringDB API
-	api = NewAPI()
+	api := NewAPI()
 	expectedURL = "https://www.peeringdb.com/api/"
 	if api.url != expectedURL {
 		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
@@ -139,10 +138,9 @@ func TestNewAPI(t *testing.T) {
 
 func TestNewAPIWithAuth(t *testing.T) {
 	var expectedURL, expectedLogin, expectedPassword string
-	var api *API
 
 	// Test to use the public PeeringDB API with authentication
-	api = NewAPIWithAuth("test", "123")
+	api := NewAPIWithAuth("test", "123")
 	expectedURL = "https://www.peeringdb.com/api/"
 	expectedLogin = "test"
 	expectedPassword = "123"

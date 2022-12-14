@@ -24,13 +24,13 @@ const (
 var (
 	// ErrBuildingURL is the error that will be returned if the URL to call the
 	// API cannot be built as expected.
-	ErrBuildingURL = errors.New("Error while building the URL to call the PeeringDB API.")
+	ErrBuildingURL = errors.New("error while building the URL to call the peeringdb api")
 	// ErrBuildingRequest is the error that will be returned if the HTTP
 	// request to call the API cannot be built as expected.
-	ErrBuildingRequest = errors.New("Error while building the request to send to the PeeringDB API.")
+	ErrBuildingRequest = errors.New("error while building the request to send to the peeringdb api")
 	// ErrQueryingAPI is the error that will be returned if there is an issue
 	// while making the request to the API.
-	ErrQueryingAPI = errors.New("Error while querying PeeringDB API.")
+	ErrQueryingAPI = errors.New("error while querying peeringdb api")
 )
 
 // API is the structure used to interact with the PeeringDB API. This is the
@@ -187,5 +187,8 @@ func (api *API) GetASN(asn int) *Network {
 		return nil
 	}
 
+	if len(*network) == 0 {
+		return nil
+	}
 	return &(*network)[0]
 }
