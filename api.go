@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"sort"
 )
 
@@ -125,7 +126,7 @@ func formatSearchParameters(parameters map[string]interface{}) string {
 
 	// For each element, append it to the request separated by a & symbol.
 	for _, key := range keys {
-		search = fmt.Sprintf("%s&%s=%v", search, key, parameters[key])
+		search = search + "&" + key + "=" + url.QueryEscape(fmt.Sprintf("%v", parameters[key]))
 	}
 
 	return search
