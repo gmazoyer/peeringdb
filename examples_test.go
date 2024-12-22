@@ -52,7 +52,12 @@ func Example() {
 
 func ExampleAPI_GetASN() {
 	api := NewAPI()
-	as201281 := api.GetASN(201281)
+	as201281, err := api.GetASN(201281)
+
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
 
 	fmt.Printf("Name: %s\n", as201281.Name)
 	fmt.Printf("ASN:  %d\n", as201281.ASN)

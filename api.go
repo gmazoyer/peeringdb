@@ -3,6 +3,7 @@ package peeringdb
 import (
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"sort"
@@ -11,6 +12,9 @@ import (
 const (
 	baseAPI                             = "https://www.peeringdb.com/api/"
 	facilityNamespace                   = "fac"
+	carrierNamespace                    = "carrier"
+	carrierFacilityNamespace            = "carrierfac"
+	campusNamespace                     = "campus"
 	internetExchangeNamespace           = "ix"
 	internetExchangeFacilityNamespace   = "ixfac"
 	internetExchangeLANNamespace        = "ixlan"
@@ -32,42 +36,28 @@ var (
 	// ErrQueryingAPI is the error that will be returned if there is an issue
 	// while making the request to the API.
 	ErrQueryingAPI = errors.New("error while querying peeringdb api")
+	// ErrRateLimitExceeded is the error that will be returned if the API rate
+	// limit is exceeded.
+	ErrRateLimitExceeded = errors.New("rate limit exceeded")
 )
 
 // API is the structure used to interact with the PeeringDB API. This is the
 // main structure of this package. All functions to make API calls are
 // associated to this structure.
 type API struct {
-	url      string
-	login    string
-	password string
-	apiKey   string
+	url    string
+	apiKey string
 }
 
 // NewAPI returns a pointer to a new API structure. It uses the publicly known
 // PeeringDB API endpoint.
 func NewAPI() *API {
-	return &API{
-		url:      baseAPI,
-		login:    "",
-		password: "",
-	}
+	return &API{url: baseAPI}
 }
 
 // NewAPIWithAuth returns a pointer to a new API structure. The API will point
-// to the publicly known PeeringDB API endpoint and will use the provided login
-// and password to attempt an authentication while making API calls.
-func NewAPIWithAuth(login, password string) *API {
-	return &API{
-		url:      baseAPI,
-		login:    login,
-		password: password,
-	}
-}
-
-// NewAPIWithAuth returns a pointer to a new API structure. The API will point
-// to the publicly known PeeringDB API endpoint and will use the provided login
-// and password to attempt an authentication while making API calls.
+// to the publicly known PeeringDB API endpoint and will use the provided API
+// key for authentication while making API calls.
 func NewAPIWithAPIKey(apiKey string) *API {
 	return &API{
 		url:    baseAPI,
@@ -82,26 +72,20 @@ func NewAPIFromURL(url string) *API {
 		return NewAPI()
 	}
 
-	return &API{
-		url:      url,
-		login:    "",
-		password: "",
-	}
+	return &API{url: url}
 }
 
-// NewAPIFromURLWithAuth returns a pointer to a new API structure from a given
+// NewAPIFromURLWithAPIKey returns a pointer to a new API structure from a given
 // URL. If the given URL is empty it will use the default PeeringDB API URL. It
-// will use the provided login and password to attempt an authentication while
-// making API calls.
-func NewAPIFromURLWithAuth(url, login, password string) *API {
+// will use the provided API key for authentication while making API calls.
+func NewAPIFromURLWithAPIKey(url, apiKey string) *API {
 	if url == "" {
-		return NewAPIWithAuth(login, password)
+		return NewAPIWithAPIKey(apiKey)
 	}
 
 	return &API{
-		url:      url,
-		login:    login,
-		password: password,
+		url:    url,
+		apiKey: apiKey,
 	}
 }
 
@@ -132,7 +116,7 @@ func formatSearchParameters(parameters map[string]interface{}) string {
 	return search
 }
 
-// formatURL is used to format The URL to call the PeeringDB API.
+// formatURL is used to format a URL to make a request on PeeringDB API.
 func formatURL(base, namespace string, search map[string]interface{}) string {
 	return fmt.Sprintf("%s%s?depth=1%s", base, namespace,
 		formatSearchParameters(search))
@@ -154,11 +138,6 @@ func (api *API) lookup(namespace string, search map[string]interface{}) (*http.R
 		return nil, ErrBuildingRequest
 	}
 
-	// If auth credentials are provided, use them
-	if (api.login != "") && (api.password != "") {
-		request.SetBasicAuth(api.login, api.password)
-	}
-
 	if api.apiKey != "" {
 		request.Header.Add("Authorization", fmt.Sprintf("Api-Key %s", api.apiKey))
 	}
@@ -170,13 +149,23 @@ func (api *API) lookup(namespace string, search map[string]interface{}) (*http.R
 		return nil, ErrQueryingAPI
 	}
 
+	// Special handling for PeeringDB rate limit
+	if response.StatusCode == http.StatusTooManyRequests {
+		return nil, ErrRateLimitExceeded
+	}
+	// Generic handling for non-OK responses
+	if response.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(response.Body)
+		return nil, fmt.Errorf("%s: %s", response.Status, body)
+	}
+
 	return response, nil
 }
 
 // GetASN is a simplified function to get PeeringDB details about a given AS
 // number. It basically gets the Net object matching the AS number. If the AS
 // number cannot be found, nil is returned.
-func (api *API) GetASN(asn int) *Network {
+func (api *API) GetASN(asn int) (*Network, error) {
 	search := make(map[string]interface{})
 	search["asn"] = asn
 
@@ -185,11 +174,18 @@ func (api *API) GetASN(asn int) *Network {
 
 	// Error, so nil pointer returned
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
 	if len(*network) == 0 {
-		return nil
+		return nil, fmt.Errorf("no network found for ASN %d", asn)
 	}
-	return &(*network)[0]
+	return &(*network)[0], nil
+}
+
+// SocialMediaItem is a structure used to represent a social media item used
+// in some records.
+type SocialMediaItem struct {
+	Service    string `json:"service"`
+	Identifier string `json:"identifier"`
 }
