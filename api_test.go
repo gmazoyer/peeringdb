@@ -136,22 +136,18 @@ func TestNewAPI(t *testing.T) {
 	}
 }
 
-func TestNewAPIWithAuth(t *testing.T) {
-	var expectedURL, expectedLogin, expectedPassword string
+func TestNewAPIWithAPIKey(t *testing.T) {
+	var expectedURL, expectedApiKey string
 
 	// Test to use the public PeeringDB API with authentication
-	api := NewAPIWithAuth("test", "123")
+	api := NewAPIWithAPIKey("test123")
 	expectedURL = "https://www.peeringdb.com/api/"
-	expectedLogin = "test"
-	expectedPassword = "123"
+	expectedApiKey = "test123"
 	if api.url != expectedURL {
 		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
 	}
-	if api.login != expectedLogin {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedLogin, api.login)
-	}
-	if api.password != expectedPassword {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedPassword, api.password)
+	if api.apiKey != expectedApiKey {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedApiKey, api.apiKey)
 	}
 }
 
@@ -175,46 +171,43 @@ func TestNewAPIFromURL(t *testing.T) {
 	}
 }
 
-func TestNewAPIFromURLWithAuth(t *testing.T) {
-	var expectedURL, expectedLogin, expectedPassword string
+func TestNewAPIFromURLWithAPIKey(t *testing.T) {
+	var expectedURL, expectedApiKey string
 	var api *API
 
 	// Test to see if an empty string parameter will force to use the public
 	// PeeringDB API.
-	api = NewAPIFromURLWithAuth("", "test", "123")
+	api = NewAPIFromURLWithAPIKey("", "test123")
 	expectedURL = "https://www.peeringdb.com/api/"
-	expectedLogin = "test"
-	expectedPassword = "123"
+	expectedApiKey = "test123"
 	if api.url != expectedURL {
 		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
 	}
-	if api.login != expectedLogin {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedLogin, api.login)
-	}
-	if api.password != expectedPassword {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedPassword, api.password)
+	if api.apiKey != expectedApiKey {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedApiKey, api.apiKey)
 	}
 
 	// Test with
-	api = NewAPIFromURLWithAuth("http://localhost/api/", "test", "123")
+	api = NewAPIFromURLWithAPIKey("http://localhost/api/", "test123")
 	expectedURL = "http://localhost/api/"
-	expectedLogin = "test"
-	expectedPassword = "123"
+	expectedApiKey = "test123"
 	if api.url != expectedURL {
 		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
 	}
-	if api.login != expectedLogin {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedLogin, api.login)
-	}
-	if api.password != expectedPassword {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedPassword, api.password)
+	if api.apiKey != expectedApiKey {
+		t.Errorf("formatURL, want '%s' got '%s'", expectedApiKey, api.apiKey)
 	}
 }
 
 func TestGetASN(t *testing.T) {
 	api := NewAPI()
 	expectedASN := 201281
-	net := api.GetASN(expectedASN)
+	net, err := api.GetASN(expectedASN)
+
+	if err != nil {
+		t.Fail()
+		return
+	}
 
 	if net.ASN != expectedASN {
 		t.Errorf("GetASN, want ASN '%d' got '%d'", expectedASN, net.ASN)

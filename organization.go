@@ -20,22 +20,32 @@ type organizationResource struct {
 // can be seen as an enterprise linked to networks, facilities and internet
 // exchange points.
 type Organization struct {
-	ID                  int       `json:"id"`
-	Name                string    `json:"name"`
-	Website             string    `json:"website"`
-	Notes               string    `json:"notes"`
-	NetworkSet          []int     `json:"net_set"`
-	FacilitySet         []int     `json:"fac_set"`
-	InternetExchangeSet []int     `json:"ix_set"`
-	Address1            string    `json:"address1"`
-	Address2            string    `json:"address2"`
-	City                string    `json:"city"`
-	Country             string    `json:"country"`
-	State               string    `json:"state"`
-	Zipcode             string    `json:"zipcode"`
-	Created             time.Time `json:"created"`
-	Updated             time.Time `json:"updated"`
-	Status              string    `json:"status"`
+	ID                  int               `json:"id"`
+	Name                string            `json:"name"`
+	AKA                 string            `json:"aka"`
+	NameLong            string            `json:"name_long"`
+	Website             string            `json:"website"`
+	SocialMedia         []SocialMediaItem `json:"social_media"`
+	Notes               string            `json:"notes"`
+	Require2FA          bool              `json:"require_2fa"`
+	NetworkSet          []int             `json:"net_set"`
+	FacilitySet         []int             `json:"fac_set"`
+	InternetExchangeSet []int             `json:"ix_set"`
+	CarrierSet          []int             `json:"carrier_set"`
+	CampusSet           []int             `json:"campus_set"`
+	Address1            string            `json:"address1"`
+	Address2            string            `json:"address2"`
+	City                string            `json:"city"`
+	Country             string            `json:"country"`
+	State               string            `json:"state"`
+	Zipcode             string            `json:"zipcode"`
+	Floor               string            `json:"floor"`
+	Suite               string            `json:"suite"`
+	Latitude            float64           `json:"latitude"`
+	Longitude           float64           `json:"longitude"`
+	Created             time.Time         `json:"created"`
+	Updated             time.Time         `json:"updated"`
+	Status              string            `json:"status"`
 }
 
 // getOrganizationResource returns a pointer to an organizationResource
