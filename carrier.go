@@ -57,7 +57,7 @@ func (api *API) getCarrierResource(search map[string]interface{}) (*carrierResou
 	return resource, nil
 }
 
-// GeCarrier returns a pointer to a slice of Carrier structures that the
+// GetCarrier returns a pointer to a slice of Carrier structures that the
 // PeeringDB API can provide matching the given search parameters map. If an
 // error occurs, the returned error will be non-nil. The returned value can be
 // nil if no object could be found.
