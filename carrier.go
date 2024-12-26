@@ -19,19 +19,22 @@ type carrierResource struct {
 // Carrier is the representation of a network able to provider transport from
 // one facility to another.
 type Carrier struct {
-	ID               int               `json:"id"`
-	OrganizationID   int               `json:"org_id"`
-	OrganizationName string            `json:"org_name"`
-	Organization     Organization      `json:"organization,omitempty"`
-	Name             string            `json:"name"`
-	AKA              string            `json:"aka"`
-	NameLong         string            `json:"name_long"`
-	Website          string            `json:"website"`
-	SocialMedia      []SocialMediaItem `json:"social_media"`
-	Notes            string            `json:"notes"`
-	Created          time.Time         `json:"created"`
-	Updated          time.Time         `json:"updated"`
-	Status           string            `json:"status"`
+	ID               int          `json:"id"`
+	OrganizationID   int          `json:"org_id"`
+	OrganizationName string       `json:"org_name"`
+	Organization     Organization `json:"organization,omitempty"`
+	Name             string       `json:"name"`
+	AKA              string       `json:"aka"`
+	NameLong         string       `json:"name_long"`
+	Website          string       `json:"website"`
+	Notes            string       `json:"notes"`
+	Created          time.Time    `json:"created"`
+	Updated          time.Time    `json:"updated"`
+	Status           string       `json:"status"`
+	SocialMedia      []struct {
+		Service    string `json:"service"`
+		Identifier string `json:"identifier"`
+	} `json:"social_media"`
 }
 
 // getCarrierResource returns a pointer to a carrierResource structure

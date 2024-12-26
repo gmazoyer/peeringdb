@@ -21,50 +21,53 @@ type networkResource struct {
 // to an Organization, contains one or more NetworkContact, and is part of
 // several Facility and InternetExchangeLAN.
 type Network struct {
-	ID                                int               `json:"id"`
-	OrganizationID                    int               `json:"org_id"`
-	Organization                      Organization      `json:"org,omitempty"`
-	Name                              string            `json:"name"`
-	AKA                               string            `json:"aka"`
-	NameLong                          string            `json:"name_long"`
-	Website                           string            `json:"website"`
-	SocialMedia                       []SocialMediaItem `json:"social_media"`
-	ASN                               int               `json:"asn"`
-	LookingGlass                      string            `json:"looking_glass"`
-	RouteServer                       string            `json:"route_server"`
-	IRRASSet                          string            `json:"irr_as_set"`
-	InfoType                          string            `json:"info_type"`
-	InfoTypes                         []string          `json:"info_types"`
-	InfoPrefixes4                     int               `json:"info_prefixes4"`
-	InfoPrefixes6                     int               `json:"info_prefixes6"`
-	InfoTraffic                       string            `json:"info_traffic"`
-	InfoRatio                         string            `json:"info_ratio"`
-	InfoScope                         string            `json:"info_scope"`
-	InfoUnicast                       bool              `json:"info_unicast"`
-	InfoMulticast                     bool              `json:"info_multicast"`
-	InfoIPv6                          bool              `json:"info_ipv6"`
-	InfoNeverViaRouteServers          bool              `json:"info_never_via_route_servers"`
-	IXCount                           int               `json:"ix_count"`
-	FacCount                          int               `json:"fac_count"`
-	Notes                             string            `json:"notes"`
-	NetworkInternetExchangeLANUpdated time.Time         `json:"netixlan_updated"`
-	NetworkFacilityUpdated            time.Time         `json:"netfac_updated"`
-	NetworkContactUpdated             time.Time         `json:"poc_updated"`
-	PolicyURL                         string            `json:"policy_url"`
-	PolicyGeneral                     string            `json:"policy_general"`
-	PolicyLocations                   string            `json:"policy_locations"`
-	PolicyRatio                       bool              `json:"policy_ratio"`
-	PolicyContracts                   string            `json:"policy_contracts"`
-	NetworkFacilitySet                []int             `json:"netfac_set"`
-	NetworkInternetExchangeLANSet     []int             `json:"netixlan_set"`
-	NetworkContactSet                 []int             `json:"poc_set"`
-	AllowIXPUpdate                    bool              `json:"allow_ixp_update"`
-	StatusDashboard                   string            `json:"status_dashboard"`
-	RIRStatus                         string            `json:"rir_status"`
-	RIRStatusUpdated                  time.Time         `json:"rir_status_updated"`
-	Created                           time.Time         `json:"created"`
-	Updated                           time.Time         `json:"updated"`
-	Status                            string            `json:"status"`
+	ID                                int          `json:"id"`
+	OrganizationID                    int          `json:"org_id"`
+	Organization                      Organization `json:"org,omitempty"`
+	Name                              string       `json:"name"`
+	AKA                               string       `json:"aka"`
+	NameLong                          string       `json:"name_long"`
+	Website                           string       `json:"website"`
+	ASN                               int          `json:"asn"`
+	LookingGlass                      string       `json:"looking_glass"`
+	RouteServer                       string       `json:"route_server"`
+	IRRASSet                          string       `json:"irr_as_set"`
+	InfoType                          string       `json:"info_type"`
+	InfoTypes                         []string     `json:"info_types"`
+	InfoPrefixes4                     int          `json:"info_prefixes4"`
+	InfoPrefixes6                     int          `json:"info_prefixes6"`
+	InfoTraffic                       string       `json:"info_traffic"`
+	InfoRatio                         string       `json:"info_ratio"`
+	InfoScope                         string       `json:"info_scope"`
+	InfoUnicast                       bool         `json:"info_unicast"`
+	InfoMulticast                     bool         `json:"info_multicast"`
+	InfoIPv6                          bool         `json:"info_ipv6"`
+	InfoNeverViaRouteServers          bool         `json:"info_never_via_route_servers"`
+	InternetExchangeCount             int          `json:"ix_count"`
+	FacilityCount                     int          `json:"fac_count"`
+	Notes                             string       `json:"notes"`
+	NetworkInternetExchangeLANUpdated time.Time    `json:"netixlan_updated"`
+	NetworkFacilityUpdated            time.Time    `json:"netfac_updated"`
+	NetworkContactUpdated             time.Time    `json:"poc_updated"`
+	PolicyURL                         string       `json:"policy_url"`
+	PolicyGeneral                     string       `json:"policy_general"`
+	PolicyLocations                   string       `json:"policy_locations"`
+	PolicyRatio                       bool         `json:"policy_ratio"`
+	PolicyContracts                   string       `json:"policy_contracts"`
+	NetworkFacilitySet                []int        `json:"netfac_set"`
+	NetworkInternetExchangeLANSet     []int        `json:"netixlan_set"`
+	NetworkContactSet                 []int        `json:"poc_set"`
+	AllowIXPUpdate                    bool         `json:"allow_ixp_update"`
+	StatusDashboard                   string       `json:"status_dashboard"`
+	RIRStatus                         string       `json:"rir_status"`
+	RIRStatusUpdated                  time.Time    `json:"rir_status_updated"`
+	Created                           time.Time    `json:"created"`
+	Updated                           time.Time    `json:"updated"`
+	Status                            string       `json:"status"`
+	SocialMedia                       []struct {
+		Service    string `json:"service"`
+		Identifier string `json:"identifier"`
+	} `json:"social_media"`
 }
 
 // getNetworkResource returns a pointer to an networkResource structure
@@ -289,6 +292,7 @@ type NetworkInternetExchangeLAN struct {
 	IPAddr4                string              `json:"ipaddr4"`
 	IPAddr6                string              `json:"ipaddr6"`
 	IsRSPeer               bool                `json:"is_rs_peer"`
+	BFDSupport             bool                `json:"bfd_support"`
 	Operational            bool                `json:"operational"`
 	NetworkSideID          int                 `json:"net_side_id"`
 	InternetExchangeSideID int                 `json:"ix_side_id"`

@@ -182,10 +182,3 @@ func (api *API) GetASN(asn int) (*Network, error) {
 	}
 	return &(*network)[0], nil
 }
-
-// SocialMediaItem is a structure used to represent a social media item used
-// in some records.
-type SocialMediaItem struct {
-	Service    string `json:"service"`
-	Identifier string `json:"identifier"`
-}
