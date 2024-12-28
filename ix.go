@@ -46,8 +46,8 @@ type InternetExchange struct {
 	NetworkCount           int          `json:"net_count"`
 	FacilityCount          int          `json:"fac_count"`
 	IxfNetCount            int          `json:"ixf_net_count"`
-	IxfLastImport          string       `json:"ixf_last_import"`
-	IxfImportRequest       string       `json:"ixf_import_request"`
+	IxfLastImport          time.Time    `json:"ixf_last_import"`
+	IxfImportRequest       time.Time    `json:"ixf_import_request"`
 	IxfImportRequestStatus string       `json:"ixf_import_request_status"`
 	ServiceLevel           string       `json:"service_level"`
 	Terms                  string       `json:"terms"`

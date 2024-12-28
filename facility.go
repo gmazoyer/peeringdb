@@ -27,7 +27,7 @@ type Facility struct {
 	CampusID                  int          `json:"campus_id"`
 	Campus                    Campus       `json:"campus,omitempty"`
 	Name                      string       `json:"name"`
-	Aka                       string       `json:"aka"`
+	AKA                       string       `json:"aka"`
 	NameLong                  string       `json:"name_long"`
 	Website                   string       `json:"website"`
 	CLLI                      string       `json:"clli"`
