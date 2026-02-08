@@ -59,10 +59,7 @@ type Facility struct {
 	Suite                     string       `json:"suite"`
 	Latitude                  float64      `json:"latitude"`
 	Longitude                 float64      `json:"longitude"`
-	SocialMedia               []struct {
-		Service    string `json:"service"`
-		Identifier string `json:"identifier"`
-	} `json:"social_media"`
+	SocialMedia               []SocialMedia `json:"social_media"`
 }
 
 // getFacilityResource returns a pointer to a facilityResource structure

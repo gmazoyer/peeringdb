@@ -45,10 +45,7 @@ type Organization struct {
 	Created             time.Time `json:"created"`
 	Updated             time.Time `json:"updated"`
 	Status              string    `json:"status"`
-	SocialMedia         []struct {
-		Service    string `json:"service"`
-		Identifier string `json:"identifier"`
-	} `json:"social_media"`
+	SocialMedia         []SocialMedia `json:"social_media"`
 }
 
 // getOrganizationResource returns a pointer to an organizationResource

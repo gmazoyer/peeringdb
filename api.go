@@ -38,6 +38,12 @@ var (
 	ErrRateLimitExceeded = errors.New("rate limit exceeded")
 )
 
+// SocialMedia represents a social media link for a PeeringDB entity.
+type SocialMedia struct {
+	Service    string `json:"service"`
+	Identifier string `json:"identifier"`
+}
+
 // API is the structure used to interact with the PeeringDB API. This is the
 // main structure of this package. All functions to make API calls are
 // associated to this structure.

@@ -35,10 +35,7 @@ type Campus struct {
 	State            string       `json:"state"`
 	Zipcode          string       `json:"zipcode"`
 	FacilitySet      []int        `json:"fac_set"`
-	SocialMedia      []struct {
-		Service    string `json:"service"`
-		Identifier string `json:"identifier"`
-	} `json:"social_media"`
+	SocialMedia      []SocialMedia `json:"social_media"`
 }
 
 // getCampusResource returns a pointer to a campusResource structure
