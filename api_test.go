@@ -126,76 +126,48 @@ func TestFormatURL(t *testing.T) {
 }
 
 func TestNewAPI(t *testing.T) {
-	var expectedURL string
-
-	// Test to use the public PeeringDB API
-	api := NewAPI()
-	expectedURL = "https://www.peeringdb.com/api/"
-	if api.url != expectedURL {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
-	}
-}
-
-func TestNewAPIWithAPIKey(t *testing.T) {
-	var expectedURL, expectedApiKey string
-
-	// Test to use the public PeeringDB API with authentication
-	api := NewAPIWithAPIKey("test123")
-	expectedURL = "https://www.peeringdb.com/api/"
-	expectedApiKey = "test123"
-	if api.url != expectedURL {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
-	}
-	if api.apiKey != expectedApiKey {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedApiKey, api.apiKey)
-	}
-}
-
-func TestNewAPIFromURL(t *testing.T) {
-	var expectedURL string
-	var api *API
-
-	// Test to see if an empty string parameter will force to use the public
-	// PeeringDB API.
-	api = NewAPIFromURL("")
-	expectedURL = "https://www.peeringdb.com/api/"
-	if api.url != expectedURL {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
+	tests := []struct {
+		name       string
+		opts       []Option
+		wantURL    string
+		wantAPIKey string
+	}{
+		{
+			name:    "default",
+			wantURL: baseAPI,
+		},
+		{
+			name:       "with API key",
+			opts:       []Option{WithAPIKey("test123")},
+			wantURL:    baseAPI,
+			wantAPIKey: "test123",
+		},
+		{
+			name:    "with custom URL",
+			opts:    []Option{WithURL("http://localhost/api/")},
+			wantURL: "http://localhost/api/",
+		},
+		{
+			name:       "with URL and API key",
+			opts:       []Option{WithURL("http://localhost/api/"), WithAPIKey("test123")},
+			wantURL:    "http://localhost/api/",
+			wantAPIKey: "test123",
+		},
 	}
 
-	// Test with
-	api = NewAPIFromURL("http://localhost/api/")
-	expectedURL = "http://localhost/api/"
-	if api.url != expectedURL {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
-	}
-}
-
-func TestNewAPIFromURLWithAPIKey(t *testing.T) {
-	var expectedURL, expectedApiKey string
-	var api *API
-
-	// Test to see if an empty string parameter will force to use the public
-	// PeeringDB API.
-	api = NewAPIFromURLWithAPIKey("", "test123")
-	expectedURL = "https://www.peeringdb.com/api/"
-	expectedApiKey = "test123"
-	if api.url != expectedURL {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
-	}
-	if api.apiKey != expectedApiKey {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedApiKey, api.apiKey)
-	}
-
-	// Test with
-	api = NewAPIFromURLWithAPIKey("http://localhost/api/", "test123")
-	expectedURL = "http://localhost/api/"
-	expectedApiKey = "test123"
-	if api.url != expectedURL {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedURL, api.url)
-	}
-	if api.apiKey != expectedApiKey {
-		t.Errorf("formatURL, want '%s' got '%s'", expectedApiKey, api.apiKey)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			api := NewAPI(tt.opts...)
+			if api.url != tt.wantURL {
+				t.Errorf("url: want %q, got %q", tt.wantURL, api.url)
+			}
+			if api.apiKey != tt.wantAPIKey {
+				t.Errorf("apiKey: want %q, got %q", tt.wantAPIKey, api.apiKey)
+			}
+			if api.client == nil {
+				t.Error("client should not be nil")
+			}
+		})
 	}
 }
 

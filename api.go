@@ -44,52 +44,47 @@ type SocialMedia struct {
 	Identifier string `json:"identifier"`
 }
 
-// API is the structure used to interact with the PeeringDB API. This is the
-// main structure of this package. All functions to make API calls are
-// associated to this structure.
+// API is the structure used to interact with the PeeringDB API.
 type API struct {
 	url    string
 	apiKey string
+	client *http.Client
 }
 
-// NewAPI returns a pointer to a new API structure. It uses the publicly known
-// PeeringDB API endpoint.
-func NewAPI() *API {
-	return &API{url: baseAPI}
+// Option configures an API instance.
+type Option func(*API)
+
+// WithURL sets a custom API endpoint URL.
+func WithURL(u string) Option {
+	return func(api *API) {
+		api.url = u
+	}
 }
 
-// NewAPIWithAPIKey returns a pointer to a new API structure. The API will point
-// to the publicly known PeeringDB API endpoint and will use the provided API
-// key for authentication while making API calls.
-func NewAPIWithAPIKey(apiKey string) *API {
-	return &API{
+// WithAPIKey sets the API key for authentication.
+func WithAPIKey(apiKey string) Option {
+	return func(api *API) {
+		api.apiKey = apiKey
+	}
+}
+
+// WithHTTPClient sets a custom HTTP client.
+func WithHTTPClient(client *http.Client) Option {
+	return func(api *API) {
+		api.client = client
+	}
+}
+
+// NewAPI returns a new API instance configured with the given options.
+func NewAPI(opts ...Option) *API {
+	api := &API{
 		url:    baseAPI,
-		apiKey: apiKey,
+		client: &http.Client{},
 	}
-}
-
-// NewAPIFromURL returns a pointer to a new API structure from a given URL. If
-// the given URL is empty it will use the default PeeringDB API URL.
-func NewAPIFromURL(url string) *API {
-	if url == "" {
-		return NewAPI()
+	for _, opt := range opts {
+		opt(api)
 	}
-
-	return &API{url: url}
-}
-
-// NewAPIFromURLWithAPIKey returns a pointer to a new API structure from a given
-// URL. If the given URL is empty it will use the default PeeringDB API URL. It
-// will use the provided API key for authentication while making API calls.
-func NewAPIFromURLWithAPIKey(url, apiKey string) *API {
-	if url == "" {
-		return NewAPIWithAPIKey(apiKey)
-	}
-
-	return &API{
-		url:    url,
-		apiKey: apiKey,
-	}
+	return api
 }
 
 // formatSearchParameters is used to format parameters for a request. When
@@ -142,9 +137,7 @@ func (api *API) lookup(namespace string, search map[string]interface{}) (*http.R
 		request.Header.Add("Authorization", fmt.Sprintf("Api-Key %s", api.apiKey))
 	}
 
-	// Send the request to the API using a simple HTTP client
-	client := &http.Client{}
-	response, err := client.Do(request)
+	response, err := api.client.Do(request)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrQueryingAPI, err)
 	}
