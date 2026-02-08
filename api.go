@@ -21,15 +21,12 @@ const (
 	internetExchangePrefixNamespace     = "ixpfx"
 	networkNamespace                    = "net"
 	networkFacilityNamespace            = "netfac"
-	networkInternetExchangeLANNamepsace = "netixlan"
+	networkInternetExchangeLANNamespace = "netixlan"
 	organizationNamespace               = "org"
 	networkContactNamespace             = "poc"
 )
 
 var (
-	// ErrBuildingURL is the error that will be returned if the URL to call the
-	// API cannot be built as expected.
-	ErrBuildingURL = errors.New("error while building the URL to call the peeringdb api")
 	// ErrBuildingRequest is the error that will be returned if the HTTP
 	// request to call the API cannot be built as expected.
 	ErrBuildingRequest = errors.New("error while building the request to send to the peeringdb api")
@@ -55,7 +52,7 @@ func NewAPI() *API {
 	return &API{url: baseAPI}
 }
 
-// NewAPIWithAuth returns a pointer to a new API structure. The API will point
+// NewAPIWithAPIKey returns a pointer to a new API structure. The API will point
 // to the publicly known PeeringDB API endpoint and will use the provided API
 // key for authentication while making API calls.
 func NewAPIWithAPIKey(apiKey string) *API {
@@ -127,9 +124,6 @@ func formatURL(base, namespace string, search map[string]interface{}) string {
 // decode with a JSON decoder.
 func (api *API) lookup(namespace string, search map[string]interface{}) (*http.Response, error) {
 	url := formatURL(api.url, namespace, search)
-	if url == "" {
-		return nil, ErrBuildingURL
-	}
 
 	// Prepare the GET request to the API, no need to set a body since
 	// everything is in the URL

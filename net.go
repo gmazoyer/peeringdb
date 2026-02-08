@@ -306,7 +306,7 @@ type NetworkInternetExchangeLAN struct {
 // response. An error can be returned if something went wrong.
 func (api *API) getNetworkInternetExchangeLANResource(search map[string]interface{}) (*networkInternetExchangeLANResource, error) {
 	// Get the NetworkInternetExchangeLANResource from the API
-	response, err := api.lookup(networkInternetExchangeLANNamepsace, search)
+	response, err := api.lookup(networkInternetExchangeLANNamespace, search)
 	if err != nil {
 		return nil, err
 	}

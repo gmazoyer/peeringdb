@@ -105,7 +105,7 @@ func TestFormatURL(t *testing.T) {
 
 	// Test netixlan namespace with search parameter
 	expected = "https://www.peeringdb.com/api/netixlan?depth=1&id=10"
-	url = formatURL(base, networkInternetExchangeLANNamepsace, searchMap)
+	url = formatURL(base, networkInternetExchangeLANNamespace, searchMap)
 	if url != expected {
 		t.Errorf("formatURL, want '%s' got '%s'", expected, url)
 	}
