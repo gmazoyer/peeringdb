@@ -135,7 +135,7 @@ func (api *API) lookup(namespace string, search map[string]interface{}) (*http.R
 	// everything is in the URL
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return nil, ErrBuildingRequest
+		return nil, fmt.Errorf("%w: %w", ErrBuildingRequest, err)
 	}
 
 	if api.apiKey != "" {
@@ -146,16 +146,18 @@ func (api *API) lookup(namespace string, search map[string]interface{}) (*http.R
 	client := &http.Client{}
 	response, err := client.Do(request)
 	if err != nil {
-		return nil, ErrQueryingAPI
+		return nil, fmt.Errorf("%w: %w", ErrQueryingAPI, err)
 	}
 
 	// Special handling for PeeringDB rate limit
 	if response.StatusCode == http.StatusTooManyRequests {
+		response.Body.Close()
 		return nil, ErrRateLimitExceeded
 	}
 	// Generic handling for non-OK responses
 	if response.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(response.Body)
+		response.Body.Close()
 		return nil, fmt.Errorf("%s: %s", response.Status, body)
 	}
 
