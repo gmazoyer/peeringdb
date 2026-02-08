@@ -36,6 +36,7 @@ type Facility struct {
 	Notes                     string       `json:"notes"`
 	NetCount                  int          `json:"net_count"`
 	IXCount                   int          `json:"ix_count"`
+	CarrierCount              int          `json:"carrier_count"`
 	SalesEmail                string       `json:"sales_email"`
 	SalesPhone                string       `json:"sales_phone"`
 	TechEmail                 string       `json:"tech_email"`
