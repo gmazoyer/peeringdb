@@ -11,9 +11,9 @@ jobs:
         - '1.24'
         - '1.25'
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v6
     - name: Setup Go ${{ matrix.go-version }}
-      uses: actions/setup-go@v3
+      uses: actions/setup-go@v6
       with:
         go-version: ${{ matrix.go-version }}
     - name: Display Go version
