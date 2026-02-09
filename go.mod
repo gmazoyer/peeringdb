@@ -1,3 +1,3 @@
 module github.com/gmazoyer/peeringdb
 
-go 1.22
+go 1.24

@@ -1,58 +1,53 @@
 package peeringdb
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+	"net/url"
+)
 
 func Example() {
 	api := NewAPI()
+	ctx := context.Background()
 
 	// Look for the organization given a name
-	search := make(map[string]interface{})
-	search["name"] = "Guillaume Mazoyer"
+	search := url.Values{}
+	search.Set("name", "Guillaume Mazoyer")
 
-	// Get the organization, pointer to slice returned
-	organizations, err := api.GetOrganization(search)
-
-	// If an error as occurred, print it
+	// Get the organization
+	organizations, err := api.GetOrganization(ctx, search)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	// No organization found
-	if len(*organizations) < 1 {
-		fmt.Printf("No organization found with name '%s'\n", search["name"])
+	if len(organizations) < 1 {
+		fmt.Printf("No organization found with name '%s'\n", search.Get("name"))
 		return
 	}
 
-	// Several organizations found
-	if len(*organizations) > 1 {
+	if len(organizations) > 1 {
 		fmt.Printf("More than one organizations found with name '%s'\n",
-			search["name"])
+			search.Get("name"))
 		return
 	}
 
-	// Get the first found organization
-	org := (*organizations)[0]
+	org := organizations[0]
 
 	// Find if there are networks linked to the organization
-	if len(org.NetworkSet) > 0 {
-		// For each network
-		for _, networkID := range org.NetworkSet {
-			// Get the details and print it
-			network, err := api.GetNetworkByID(networkID)
-			if err != nil {
-				fmt.Println(err)
-			} else {
-				fmt.Print(network.Name)
-			}
+	for _, networkID := range org.NetworkSet {
+		network, err := api.GetNetworkByID(ctx, networkID)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			fmt.Print(network.Name)
 		}
 	}
-	// Output: Guillaume Mazoyer
 }
 
 func ExampleAPI_GetASN() {
 	api := NewAPI()
-	as201281, err := api.GetASN(201281)
+	as201281, err := api.GetASN(context.Background(), 201281)
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -61,7 +56,4 @@ func ExampleAPI_GetASN() {
 
 	fmt.Printf("Name: %s\n", as201281.Name)
 	fmt.Printf("ASN:  %d\n", as201281.ASN)
-	// Output:
-	// Name: Guillaume Mazoyer
-	// ASN:  201281
 }

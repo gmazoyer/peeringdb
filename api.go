@@ -1,13 +1,17 @@
 package peeringdb
 
 import (
+	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
-	"sort"
+	"strconv"
 )
+
+const Version = "0.1.0"
 
 const (
 	baseAPI                             = "https://www.peeringdb.com/api/"
@@ -21,164 +25,156 @@ const (
 	internetExchangePrefixNamespace     = "ixpfx"
 	networkNamespace                    = "net"
 	networkFacilityNamespace            = "netfac"
-	networkInternetExchangeLANNamepsace = "netixlan"
+	networkInternetExchangeLANNamespace = "netixlan"
 	organizationNamespace               = "org"
 	networkContactNamespace             = "poc"
 )
 
 var (
-	// ErrBuildingURL is the error that will be returned if the URL to call the
-	// API cannot be built as expected.
-	ErrBuildingURL = errors.New("error while building the URL to call the peeringdb api")
-	// ErrBuildingRequest is the error that will be returned if the HTTP
-	// request to call the API cannot be built as expected.
-	ErrBuildingRequest = errors.New("error while building the request to send to the peeringdb api")
-	// ErrQueryingAPI is the error that will be returned if there is an issue
-	// while making the request to the API.
-	ErrQueryingAPI = errors.New("error while querying peeringdb api")
-	// ErrRateLimitExceeded is the error that will be returned if the API rate
-	// limit is exceeded.
+	// ErrBuildingRequest is returned if the HTTP request to call the API
+	// cannot be built as expected.
+	ErrBuildingRequest = errors.New("error building request for peeringdb api")
+	// ErrQueryingAPI is returned if there is an issue while making the
+	// request to the API.
+	ErrQueryingAPI = errors.New("error querying peeringdb api")
+	// ErrRateLimitExceeded is returned if the API rate limit is exceeded.
 	ErrRateLimitExceeded = errors.New("rate limit exceeded")
+	// ErrInvalidID is returned when a resource ID is invalid (e.g. <= 0).
+	ErrInvalidID = errors.New("invalid resource ID")
 )
 
-// API is the structure used to interact with the PeeringDB API. This is the
-// main structure of this package. All functions to make API calls are
-// associated to this structure.
+// SocialMedia represents a social media link for a PeeringDB entity.
+type SocialMedia struct {
+	Service    string `json:"service"`
+	Identifier string `json:"identifier"`
+}
+
+// resource is a generic top-level structure for parsing JSON responses from
+// the PeeringDB API.
+type resource[T any] struct {
+	Meta struct {
+		Generated float64 `json:"generated,omitempty"`
+	} `json:"meta"`
+	Data []T `json:"data"`
+}
+
+// API is the structure used to interact with the PeeringDB API.
 type API struct {
 	url    string
 	apiKey string
+	client *http.Client
 }
 
-// NewAPI returns a pointer to a new API structure. It uses the publicly known
-// PeeringDB API endpoint.
-func NewAPI() *API {
-	return &API{url: baseAPI}
+// Option configures an API instance.
+type Option func(*API)
+
+// WithURL sets a custom API endpoint URL.
+func WithURL(u string) Option {
+	return func(api *API) {
+		api.url = u
+	}
 }
 
-// NewAPIWithAuth returns a pointer to a new API structure. The API will point
-// to the publicly known PeeringDB API endpoint and will use the provided API
-// key for authentication while making API calls.
-func NewAPIWithAPIKey(apiKey string) *API {
-	return &API{
+// WithAPIKey sets the API key for authentication.
+func WithAPIKey(apiKey string) Option {
+	return func(api *API) {
+		api.apiKey = apiKey
+	}
+}
+
+// WithHTTPClient sets a custom HTTP client.
+func WithHTTPClient(client *http.Client) Option {
+	return func(api *API) {
+		api.client = client
+	}
+}
+
+// NewAPI returns a new API instance configured with the given options.
+func NewAPI(opts ...Option) *API {
+	api := &API{
 		url:    baseAPI,
-		apiKey: apiKey,
+		client: &http.Client{},
 	}
+	for _, opt := range opts {
+		opt(api)
+	}
+	return api
 }
 
-// NewAPIFromURL returns a pointer to a new API structure from a given URL. If
-// the given URL is empty it will use the default PeeringDB API URL.
-func NewAPIFromURL(url string) *API {
-	if url == "" {
-		return NewAPI()
+// fetch queries the PeeringDB API for a given namespace and returns a slice
+// of results. It uses generics to avoid per-entity boilerplate.
+func fetch[T any](ctx context.Context, api *API, namespace string, search url.Values) ([]T, error) {
+	u := api.url + namespace + "?depth=1"
+	if len(search) > 0 {
+		u += "&" + search.Encode()
 	}
 
-	return &API{url: url}
-}
-
-// NewAPIFromURLWithAPIKey returns a pointer to a new API structure from a given
-// URL. If the given URL is empty it will use the default PeeringDB API URL. It
-// will use the provided API key for authentication while making API calls.
-func NewAPIFromURLWithAPIKey(url, apiKey string) *API {
-	if url == "" {
-		return NewAPIWithAPIKey(apiKey)
-	}
-
-	return &API{
-		url:    url,
-		apiKey: apiKey,
-	}
-}
-
-// formatSearchParameters is used to format parameters for a request. When
-// building the search string the keys will be used in the alphabetic order.
-func formatSearchParameters(parameters map[string]interface{}) string {
-	// Nothing in slice, just return empty string
-	if parameters == nil {
-		return ""
-	}
-
-	var search string
-	var keys []string
-
-	// Get all map keys
-	for i := range parameters {
-		keys = append(keys, i)
-	}
-
-	// Sort the keys slice
-	sort.Strings(keys)
-
-	// For each element, append it to the request separated by a & symbol.
-	for _, key := range keys {
-		search = search + "&" + key + "=" + url.QueryEscape(fmt.Sprintf("%v", parameters[key]))
-	}
-
-	return search
-}
-
-// formatURL is used to format a URL to make a request on PeeringDB API.
-func formatURL(base, namespace string, search map[string]interface{}) string {
-	return fmt.Sprintf("%s%s?depth=1%s", base, namespace,
-		formatSearchParameters(search))
-}
-
-// lookup is used to query the PeeringDB API given a namespace to use and data
-// to format the request. It returns an HTTP response that the caller must
-// decode with a JSON decoder.
-func (api *API) lookup(namespace string, search map[string]interface{}) (*http.Response, error) {
-	url := formatURL(api.url, namespace, search)
-	if url == "" {
-		return nil, ErrBuildingURL
-	}
-
-	// Prepare the GET request to the API, no need to set a body since
-	// everything is in the URL
-	request, err := http.NewRequest("GET", url, nil)
+	request, err := http.NewRequestWithContext(ctx, http.MethodGet, u, nil)
 	if err != nil {
-		return nil, ErrBuildingRequest
+		return nil, fmt.Errorf("%w: %w", ErrBuildingRequest, err)
 	}
 
+	request.Header.Set("User-Agent", "go-peeringdb/"+Version)
 	if api.apiKey != "" {
-		request.Header.Add("Authorization", fmt.Sprintf("Api-Key %s", api.apiKey))
+		request.Header.Set("Authorization", "Api-Key "+api.apiKey)
 	}
 
-	// Send the request to the API using a simple HTTP client
-	client := &http.Client{}
-	response, err := client.Do(request)
+	response, err := api.client.Do(request)
 	if err != nil {
-		return nil, ErrQueryingAPI
+		return nil, fmt.Errorf("%w: %w", ErrQueryingAPI, err)
 	}
+	defer response.Body.Close()
 
-	// Special handling for PeeringDB rate limit
 	if response.StatusCode == http.StatusTooManyRequests {
 		return nil, ErrRateLimitExceeded
 	}
-	// Generic handling for non-OK responses
 	if response.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(response.Body)
 		return nil, fmt.Errorf("%s: %s", response.Status, body)
 	}
 
-	return response, nil
+	var r resource[T]
+	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
+		return nil, err
+	}
+
+	return r.Data, nil
 }
 
-// GetASN is a simplified function to get PeeringDB details about a given AS
-// number. It basically gets the Net object matching the AS number. If the AS
-// number cannot be found, nil is returned.
-func (api *API) GetASN(asn int) (*Network, error) {
-	search := make(map[string]interface{})
-	search["asn"] = asn
+// fetchByID queries the PeeringDB API for a single resource by ID.
+func fetchByID[T any](ctx context.Context, api *API, namespace string, id int) (*T, error) {
+	if id <= 0 {
+		return nil, ErrInvalidID
+	}
 
-	// Actually fetch the Network from PeeringDB
-	network, err := api.GetNetwork(search)
+	search := url.Values{}
+	search.Set("id", strconv.Itoa(id))
 
-	// Error, so nil pointer returned
+	results, err := fetch[T](ctx, api, namespace, search)
+	if err != nil {
+		return nil, err
+	}
+	if len(results) == 0 {
+		return nil, nil
+	}
+
+	return &results[0], nil
+}
+
+// GetASN returns the Network matching the given AS number. If the AS number
+// cannot be found, an error is returned.
+func (api *API) GetASN(ctx context.Context, asn int) (*Network, error) {
+	search := url.Values{}
+	search.Set("asn", strconv.Itoa(asn))
+
+	networks, err := api.GetNetwork(ctx, search)
 	if err != nil {
 		return nil, err
 	}
 
-	if len(*network) == 0 {
+	if len(networks) == 0 {
 		return nil, fmt.Errorf("no network found for ASN %d", asn)
 	}
-	return &(*network)[0], nil
+
+	return &networks[0], nil
 }

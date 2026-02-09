@@ -1,6 +1,6 @@
 # PeeringDB API - Go package
 
-[![GoDoc](https://godoc.org/github.com/gmazoyer/peeringdb?status.svg)](https://godoc.org/github.com/gmazoyer/peeringdb)
+[![Go Reference](https://pkg.go.dev/badge/github.com/gmazoyer/peeringdb.svg)](https://pkg.go.dev/github.com/gmazoyer/peeringdb)
 [![Go Report Card](https://goreportcard.com/badge/github.com/gmazoyer/peeringdb)](https://goreportcard.com/report/github.com/gmazoyer/peeringdb)
 
 This is a Go package that allows developer to interact with the
@@ -14,8 +14,44 @@ Install the library package with `go get github.com/gmazoyer/peeringdb`.
 
 ## Example
 
-There are small examples in the
-[package documentation](https://godoc.org/github.com/gmazoyer/peeringdb).
+```go
+package main
 
-You can also found a real life example with the
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/gmazoyer/peeringdb"
+)
+
+func main() {
+	// Create an API client (optionally with an API key)
+	api := peeringdb.NewAPI(
+		peeringdb.WithAPIKey("your-api-key"),
+	)
+	ctx := context.Background()
+
+	// Look up a network by its ASN
+	network, err := api.GetASN(ctx, 201281)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Network: %s (AS%d)\n", network.Name, network.ASN)
+
+	// List all facilities linked to this network
+	for _, netfacID := range network.NetworkFacilitySet {
+		netfac, err := api.GetNetworkFacilityByID(ctx, netfacID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("  Facility: %s (%s, %s)\n", netfac.Name, netfac.City, netfac.Country)
+	}
+}
+```
+
+More examples are available in the
+[package documentation](https://pkg.go.dev/github.com/gmazoyer/peeringdb).
+
+You can also find a real life example with the
 [PeeringDB synchronization tool](https://github.com/gmazoyer/peeringdb-sync).
