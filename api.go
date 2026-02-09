@@ -11,6 +11,8 @@ import (
 	"strconv"
 )
 
+const Version = "0.1.0"
+
 const (
 	baseAPI                             = "https://www.peeringdb.com/api/"
 	facilityNamespace                   = "fac"
@@ -112,6 +114,7 @@ func fetch[T any](ctx context.Context, api *API, namespace string, search url.Va
 		return nil, fmt.Errorf("%w: %w", ErrBuildingRequest, err)
 	}
 
+	request.Header.Set("User-Agent", "go-peeringdb/"+Version)
 	if api.apiKey != "" {
 		request.Header.Set("Authorization", "Api-Key "+api.apiKey)
 	}
