@@ -1,6 +1,6 @@
 # PeeringDB API - Go package
 
-[![GoDoc](https://godoc.org/github.com/gmazoyer/peeringdb?status.svg)](https://godoc.org/github.com/gmazoyer/peeringdb)
+[![Go Reference](https://pkg.go.dev/badge/github.com/gmazoyer/peeringdb.svg)](https://pkg.go.dev/github.com/gmazoyer/peeringdb)
 [![Go Report Card](https://goreportcard.com/badge/github.com/gmazoyer/peeringdb)](https://goreportcard.com/report/github.com/gmazoyer/peeringdb)
 
 This is a Go package that allows developer to interact with the
@@ -51,7 +51,7 @@ func main() {
 ```
 
 More examples are available in the
-[package documentation](https://godoc.org/github.com/gmazoyer/peeringdb).
+[package documentation](https://pkg.go.dev/github.com/gmazoyer/peeringdb).
 
 You can also find a real life example with the
 [PeeringDB synchronization tool](https://github.com/gmazoyer/peeringdb-sync).
